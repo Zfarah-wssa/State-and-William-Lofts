@@ -24,9 +24,8 @@ export function UnitAnalysisCard({ unit }: { unit: Unit621William }) {
     const totalMonthlyRent = pricePerBed * unit.bedrooms;
     const pricePerSf = totalMonthlyRent / unit.squareFootage;
     const annualGrossRevenue = totalMonthlyRent * 12;
-    const discountToComp = ((unit.compPricePerBed - pricePerBed) / unit.compPricePerBed) * 100;
 
-    return { sfPerBed, bathRatio, pricePerSf, annualGrossRevenue, discountToComp };
+    return { sfPerBed, bathRatio, pricePerSf, annualGrossRevenue };
   }, [pricePerBed, unit]);
 
   const handlePriceChange = (raw: string) => {
@@ -77,7 +76,7 @@ export function UnitAnalysisCard({ unit }: { unit: Unit621William }) {
         <div className="flex flex-col gap-5 p-6 sm:p-7">
           <div>
             <p className={`text-xs font-semibold uppercase tracking-[0.25em] ${accent.text}`}>
-              {unit.compName ? "Unit market analysis" : "Unit"}
+              Unit market analysis
             </p>
             <h3 className="mt-1 font-display text-2xl text-ink">{unit.name}</h3>
             <p className="text-sm text-slate">
@@ -142,19 +141,11 @@ export function UnitAnalysisCard({ unit }: { unit: Unit621William }) {
               <dt className="text-slate">Annual gross revenue</dt>
               <dd className="font-semibold text-ink">${currency(stats.annualGrossRevenue)} / yr</dd>
             </div>
-            <div className="flex items-center justify-between gap-3 col-span-2">
-              <dt className="text-slate">Discount to comp</dt>
-              <dd className="font-semibold text-ink">
-                {stats.discountToComp >= 0 ? "−" : "+"}
-                {Math.abs(stats.discountToComp).toFixed(0)}%{" "}
-                <span className="font-normal text-slate">vs {unit.compName}</span>
-              </dd>
-            </div>
           </dl>
 
           <p className="text-xs text-slate/80">
-            Closest competitor by SF &mdash; {unit.compName} (reference rent ${currency(unit.compPricePerBed)} / bed / mo).
-            Adjust the price per bed above to model revenue and positioning.
+            Adjust the price per bed above to model price per square foot and
+            annual gross revenue for this unit.
           </p>
         </div>
       </div>

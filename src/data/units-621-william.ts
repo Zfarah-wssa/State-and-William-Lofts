@@ -12,9 +12,6 @@ export type Unit621William = {
   bathrooms: number;
   squareFootage: number;
   basePricePerBed: number;
-  /** Reference rent for the closest comparable unit, used to compute "discount to comp" live. */
-  compPricePerBed: number;
-  compName: string;
   accent: "blue" | "brass" | "green";
   floorPlan: UnitImage;
   renderings: UnitImage[];
@@ -31,8 +28,6 @@ export const units621William: Unit621William[] = [
     bathrooms: 3,
     squareFootage: 1534,
     basePricePerBed: 1150,
-    compPricePerBed: 1716,
-    compName: "Vic Village 5A",
     accent: "blue",
     floorPlan: {
       src: "/images/621-william/floorplan-5bed-3bath.jpg",
@@ -60,8 +55,6 @@ export const units621William: Unit621William[] = [
     bathrooms: 2,
     squareFootage: 987,
     basePricePerBed: 1550,
-    compPricePerBed: 1845,
-    compName: "Vic Village 3A",
     accent: "brass",
     floorPlan: {
       src: "/images/621-william/floorplan-3bed-2bath.jpg",
@@ -84,8 +77,6 @@ export const units621William: Unit621William[] = [
     bathrooms: 2,
     squareFootage: 1042,
     basePricePerBed: 1850,
-    compPricePerBed: 2056,
-    compName: "Vic Village S 2BR",
     accent: "green",
     floorPlan: {
       src: "/images/621-william/floorplan-2bed-2bath.jpg",
