@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { properties } from "@/data/properties";
 import { PropertyCard } from "@/components/PropertyCard";
 
@@ -19,6 +20,23 @@ export function FeaturedListings() {
             furnished, and located along Ann Arbor&rsquo;s most walkable
             corridors &mdash; from the Diag to South University.
           </p>
+        </div>
+
+        <div className="mt-8 flex items-center justify-between gap-4 rounded-2xl border border-brass/25 bg-ink px-6 py-5 text-stone sm:px-8">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brass-soft">
+              New &middot; Owner Preview
+            </p>
+            <p className="mt-1 font-display text-lg sm:text-xl">
+              621 William &mdash; architect renderings &amp; live unit market analysis
+            </p>
+          </div>
+          <Link
+            href="/properties/621-william"
+            className="inline-flex shrink-0 items-center justify-center rounded-full bg-brass px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-brass-soft"
+          >
+            View Units
+          </Link>
         </div>
 
         <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
