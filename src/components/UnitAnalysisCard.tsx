@@ -21,12 +21,9 @@ export function UnitAnalysisCard({ unit }: { unit: Unit621William }) {
   const stats = useMemo(() => {
     const sfPerBed = unit.squareFootage / unit.bedrooms;
     const bathRatio = unit.bathrooms / unit.bedrooms;
-    const totalMonthlyRent = pricePerBed * unit.bedrooms;
-    const pricePerSf = totalMonthlyRent / unit.squareFootage;
-    const annualGrossRevenue = totalMonthlyRent * 12;
 
-    return { sfPerBed, bathRatio, pricePerSf, annualGrossRevenue };
-  }, [pricePerBed, unit]);
+    return { sfPerBed, bathRatio };
+  }, [unit]);
 
   const handlePriceChange = (raw: string) => {
     const parsed = Number(raw.replace(/[^0-9.]/g, ""));
@@ -79,11 +76,14 @@ export function UnitAnalysisCard({ unit }: { unit: Unit621William }) {
         <div className="flex flex-col gap-5 p-6 sm:p-7">
           <div>
             <p className={`text-xs font-semibold uppercase tracking-[0.25em] ${accent.text}`}>
-              Unit market analysis
+              Unit details
             </p>
             <h3 className="mt-1 font-display text-2xl text-ink">{unit.name}</h3>
             <p className="text-sm text-slate">
               {unit.address} &middot; {unit.bedrooms} bed / {unit.bathrooms} bath
+            </p>
+            <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-stone-deep px-3 py-1.5 text-xs font-medium uppercase tracking-wide text-ink-text">
+              Fully furnished &middot; in-unit washer &amp; dryer
             </p>
           </div>
 
@@ -134,22 +134,6 @@ export function UnitAnalysisCard({ unit }: { unit: Unit621William }) {
               </span>
             </div>
           </div>
-
-          <dl className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
-            <div className="flex items-center justify-between gap-3 col-span-2">
-              <dt className="text-slate">Price per SF</dt>
-              <dd className="font-semibold text-ink">${stats.pricePerSf.toFixed(2)} / SF</dd>
-            </div>
-            <div className="flex items-center justify-between gap-3 col-span-2">
-              <dt className="text-slate">Annual gross revenue</dt>
-              <dd className="font-semibold text-ink">${currency(stats.annualGrossRevenue)} / yr</dd>
-            </div>
-          </dl>
-
-          <p className="text-xs text-slate/80">
-            Adjust the price per bed above to model price per square foot and
-            annual gross revenue for this unit.
-          </p>
         </div>
       </div>
     </article>

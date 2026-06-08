@@ -1,102 +1,73 @@
+import Image from "next/image";
+import Link from "next/link";
+
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-ink text-stone">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-30"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 80% 10%, rgba(200,155,60,0.35), transparent 45%), radial-gradient(circle at 10% 90%, rgba(227,196,120,0.18), transparent 40%)",
-        }}
+    <section className="relative flex min-h-[92vh] items-end overflow-hidden bg-ink text-stone">
+      <Image
+        src="/images/621-william/render-vaulted-living.jpg"
+        alt="Sunlit living room and kitchen interior at 621 William"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.07]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(246,243,236,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(246,243,236,0.6) 1px, transparent 1px)",
-          backgroundSize: "64px 64px",
-        }}
+        className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/20"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-gradient-to-r from-ink/80 via-ink/20 to-transparent"
       />
 
-      <div className="relative mx-auto flex max-w-7xl flex-col gap-10 px-6 py-24 lg:flex-row lg:items-center lg:gap-16 lg:px-10 lg:py-32">
-        <div className="max-w-2xl">
-          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-brass/30 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-brass-soft">
-            Now Leasing &middot; Fall 2026
-          </p>
-          <h1 className="font-display text-4xl leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
-            Premium student living, steps from{" "}
-            <span className="text-brass-soft">Central Campus</span>.
-          </h1>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-stone/80 sm:text-lg">
-            State &amp; William Lofts curates a portfolio of beautifully renovated
-            apartments and townhomes across Ann Arbor &mdash; designed for Michigan
-            students who expect more from where they live.
-          </p>
+      <div className="relative mx-auto w-full max-w-7xl px-6 pb-16 pt-40 sm:pb-20 lg:px-10 lg:pb-24">
+        <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-brass/30 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-brass-soft backdrop-blur-sm">
+          Now Leasing &middot; Fall 2026 &middot; 621 E. William St.
+        </p>
 
-          <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
-            <a
-              href="#listings"
-              className="inline-flex items-center justify-center rounded-full bg-brass px-7 py-3.5 text-sm font-semibold text-ink shadow-lg shadow-brass/20 transition-transform hover:-translate-y-0.5 hover:bg-brass-soft"
-            >
-              Explore Available Lofts
-            </a>
-            <a
-              href="#contact"
-              className="inline-flex items-center justify-center rounded-full border border-stone/25 px-7 py-3.5 text-sm font-semibold text-stone transition-colors hover:border-stone/60"
-            >
-              Schedule a Private Tour
-            </a>
-          </div>
+        <h1 className="max-w-3xl font-display text-4xl leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
+          Premium student living, fully furnished, steps from{" "}
+          <span className="text-brass-soft">Central Campus</span>.
+        </h1>
 
-          <dl className="mt-14 grid grid-cols-3 gap-6 border-t border-stone/10 pt-8 sm:max-w-md">
-            <div>
-              <dt className="font-display text-2xl text-brass-soft sm:text-3xl">3</dt>
-              <dd className="mt-1 text-xs uppercase tracking-wide text-stone/60">
-                Available units
-              </dd>
-            </div>
-            <div>
-              <dt className="font-display text-2xl text-brass-soft sm:text-3xl">621</dt>
-              <dd className="mt-1 text-xs uppercase tracking-wide text-stone/60">
-                E. William St.
-              </dd>
-            </div>
-            <div>
-              <dt className="font-display text-2xl text-brass-soft sm:text-3xl">2026</dt>
-              <dd className="mt-1 text-xs uppercase tracking-wide text-stone/60">
-                Fall lease term
-              </dd>
-            </div>
-          </dl>
+        <p className="mt-6 max-w-xl text-base leading-relaxed text-stone/85 sm:text-lg">
+          State &amp; William Lofts brings three beautifully renovated units to
+          621 E. William St. &mdash; a five-minute walk from the Diag. Every
+          home arrives fully furnished, and every unit has its own in-unit
+          washer and dryer.
+        </p>
+
+        <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <Link
+            href="/properties/621-william"
+            className="inline-flex items-center justify-center rounded-full bg-brass px-8 py-3.5 text-sm font-semibold text-ink shadow-lg shadow-brass/30 transition-transform hover:-translate-y-0.5 hover:bg-brass-soft"
+          >
+            View Units
+          </Link>
+          <a
+            href="#contact"
+            className="inline-flex items-center justify-center rounded-full border border-stone/30 px-8 py-3.5 text-sm font-semibold text-stone backdrop-blur-sm transition-colors hover:border-stone/60"
+          >
+            Schedule a Private Tour
+          </a>
         </div>
 
-        <div className="relative mx-auto w-full max-w-md lg:mx-0 lg:max-w-lg">
-          <div className="absolute -inset-4 rounded-[2rem] border border-brass/20" aria-hidden />
-          <div className="overflow-hidden rounded-3xl border border-stone/10 bg-ink-soft/60 shadow-2xl shadow-black/30">
-            <div className="space-y-4 p-7">
-              <p className="text-xs uppercase tracking-[0.25em] text-brass-soft">
-                Now leasing &middot; 615.5 / 621 E. William St.
-              </p>
-              <h2 className="font-display text-2xl text-stone">
-                Level 2 West
-              </h2>
-              <p className="text-sm leading-relaxed text-stone/70">
-                A spacious five-bedroom layout at 615.5 E. William St. &mdash;
-                fully furnished, with designer finishes and 1,534 square feet
-                of living space.
-              </p>
-              <div className="flex items-center justify-between border-t border-stone/10 pt-4">
-                <span className="font-display text-xl text-brass-soft">
-                  $1,150<span className="text-sm text-stone/60"> / bed / mo</span>
-                </span>
-                <span className="rounded-full bg-stone/10 px-3 py-1 text-xs font-medium text-stone/80">
-                  5 bed &middot; 3 bath
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ul className="mt-12 flex flex-wrap gap-3 text-sm">
+          {[
+            "Fully furnished",
+            "In-unit washer & dryer in every home",
+            "Central A/C",
+            "5 min to The Diag",
+          ].map((item) => (
+            <li
+              key={item}
+              className="rounded-full border border-stone/15 bg-white/5 px-4 py-2 font-medium text-stone/90 backdrop-blur-sm"
+            >
+              {item}
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
