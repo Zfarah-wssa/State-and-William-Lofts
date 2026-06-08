@@ -3,11 +3,30 @@
 import { useId, useMemo, useState } from "react";
 import Image from "next/image";
 import type { Unit621William } from "@/data/units-621-william";
+import { InterestModal } from "@/components/InterestModal";
 
-const accentClasses: Record<Unit621William["accent"], { rule: string; text: string; ring: string }> = {
-  blue: { rule: "bg-[#2f5d8a]", text: "text-[#2f5d8a]", ring: "focus:ring-[#2f5d8a]/30" },
-  brass: { rule: "bg-brass", text: "text-brass", ring: "focus:ring-brass/30" },
-  green: { rule: "bg-[#2f7a52]", text: "text-[#2f7a52]", ring: "focus:ring-[#2f7a52]/30" },
+const accentClasses: Record<
+  Unit621William["accent"],
+  { rule: string; text: string; ring: string; button: string }
+> = {
+  blue: {
+    rule: "bg-[#2f5d8a]",
+    text: "text-[#2f5d8a]",
+    ring: "focus:ring-[#2f5d8a]/30",
+    button: "bg-[#2f5d8a] text-stone hover:bg-[#264a6e]",
+  },
+  brass: {
+    rule: "bg-brass",
+    text: "text-brass",
+    ring: "focus:ring-brass/30",
+    button: "bg-brass text-ink hover:bg-brass-soft",
+  },
+  green: {
+    rule: "bg-[#2f7a52]",
+    text: "text-[#2f7a52]",
+    ring: "focus:ring-[#2f7a52]/30",
+    button: "bg-[#2f7a52] text-stone hover:bg-[#266042]",
+  },
 };
 
 const currency = (value: number) =>
@@ -82,9 +101,18 @@ export function UnitDetailsCard({ unit }: { unit: Unit621William }) {
             <p className="text-sm text-slate">
               {unit.address} &middot; {unit.bedrooms} bed / {unit.bathrooms} bath
             </p>
-            <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-stone-deep px-3 py-1.5 text-xs font-medium uppercase tracking-wide text-ink-text">
-              Fully furnished &middot; laundry machines included per unit
-            </p>
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {["Newly constructed", "Fully furnished", "Laundry machines included per unit"].map(
+                (label) => (
+                  <span
+                    key={label}
+                    className="rounded-full bg-stone-deep px-3 py-1.5 text-xs font-medium uppercase tracking-wide text-ink-text"
+                  >
+                    {label}
+                  </span>
+                ),
+              )}
+            </div>
           </div>
 
           <dl className="grid grid-cols-2 gap-x-6 gap-y-3 border-y border-ink/8 py-5 text-sm">
@@ -133,6 +161,10 @@ export function UnitDetailsCard({ unit }: { unit: Unit621William }) {
                 / mo
               </span>
             </div>
+          </div>
+
+          <div className="pt-1">
+            <InterestModal unitName={unit.name} buttonClass={accent.button} />
           </div>
         </div>
       </div>

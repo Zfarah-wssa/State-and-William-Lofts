@@ -51,9 +51,18 @@ export function FeaturedListings() {
                     {unit.bedrooms} bed &middot; {unit.bathrooms} bath &middot;{" "}
                     {unit.squareFootage.toLocaleString()} SF
                   </p>
-                  <p className="mt-2 inline-flex items-center gap-2 rounded-full bg-stone-deep px-3 py-1 text-xs font-medium uppercase tracking-wide text-ink-text">
-                    Fully furnished &middot; laundry machines included per unit
-                  </p>
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {["Newly constructed", "Fully furnished", "Laundry machines included per unit"].map(
+                      (label) => (
+                        <span
+                          key={label}
+                          className="rounded-full bg-stone-deep px-3 py-1 text-xs font-medium uppercase tracking-wide text-ink-text"
+                        >
+                          {label}
+                        </span>
+                      ),
+                    )}
+                  </div>
                 </div>
 
                 <div className="mt-auto flex items-center justify-between border-t border-ink/8 pt-4">

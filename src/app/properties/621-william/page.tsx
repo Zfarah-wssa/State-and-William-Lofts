@@ -24,10 +24,12 @@ export default function William621Page() {
               621 William &mdash; floor plans &amp; unit renderings
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-stone/70 sm:text-base">
-              {williamStreetAddress}. Browse architect floor plans and interior
-              renderings for each of our three curated units &mdash; every home
-              is fully furnished, and laundry machines are included per unit.
-              Use the editable price field to model your own rent scenarios.
+              {williamStreetAddress}. These are state-of-the-art, newly
+              constructed units &mdash; browse architect floor plans and
+              interior renderings for each of our three curated homes. Every
+              unit is fully furnished, and laundry machines are included per
+              unit. Use the editable price field to model your own rent
+              scenarios.
             </p>
           </div>
         </section>

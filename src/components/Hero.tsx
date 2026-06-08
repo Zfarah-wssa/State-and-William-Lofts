@@ -27,14 +27,15 @@ export function Hero() {
         </p>
 
         <h1 className="max-w-3xl font-display text-4xl leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
-          Premium student living, fully furnished, steps from{" "}
-          <span className="text-brass-soft">Central Campus</span>.
+          State-of-the-art, newly constructed units &mdash; fully furnished,
+          steps from <span className="text-brass-soft">Central Campus</span>.
         </h1>
 
         <p className="mt-6 max-w-xl text-base leading-relaxed text-stone/85 sm:text-lg">
-          State &amp; William Lofts brings three curated units to 621 E.
-          William St. &mdash; a five-minute walk from the Diag. Every home is
-          fully furnished, and laundry machines are included per unit.
+          State &amp; William Lofts brings three newly constructed, curated
+          units to 621 E. William St. &mdash; a five-minute walk from the Diag.
+          Every home is fully furnished, and laundry machines are included per
+          unit.
         </p>
 
         <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -54,6 +55,7 @@ export function Hero() {
 
         <ul className="mt-12 flex flex-wrap gap-3 text-sm">
           {[
+            "Newly constructed",
             "Fully furnished",
             "Laundry machines included per unit",
             "Central A/C",

@@ -36,14 +36,9 @@ export const units621William: Unit621William[] = [
     },
     renderings: [
       {
-        src: "/images/621-william/render-living-hallway.jpg",
-        alt: "Living room and hallway rendering for Level 2 West",
-        caption: "Living room & bedroom hall",
-      },
-      {
-        src: "/images/621-william/render-bedroom-study.jpg",
-        alt: "Bedroom and study nook rendering",
-        caption: "Bedroom & study nook",
+        src: "/images/621-william/render-kitchen-island.jpg",
+        alt: "Kitchen island and living area rendering for Level 2 West",
+        caption: "Kitchen island & living area",
       },
     ],
   },
@@ -63,9 +58,14 @@ export const units621William: Unit621William[] = [
     },
     renderings: [
       {
-        src: "/images/621-william/render-kitchen-island.jpg",
-        alt: "Kitchen island and living area rendering for Level 2 East",
-        caption: "Kitchen island & living area",
+        src: "/images/621-william/render-living-hallway.jpg",
+        alt: "Living room and hallway rendering for Level 2 East",
+        caption: "Living room & bedroom hall",
+      },
+      {
+        src: "/images/621-william/render-bedroom-study.jpg",
+        alt: "Bedroom and study nook rendering",
+        caption: "Bedroom & study nook",
       },
     ],
   },
