@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@theme {
+  /* Deep, sophisticated ink-blue (a refined nod to Michigan Blue) */
+  --color-ink: #0f1b2d;
+  --color-ink-soft: #1c2d44;
+  --color-ink-text: #1b2331;
+  --color-slate: #5b6678;
+
+  /* Warm brass / maize accent (a refined nod to Michigan Maize) */
+  --color-brass: #c89b3c;
+  --color-brass-soft: #e3c478;
+
+  /* Warm neutral backgrounds & surfaces */
+  --color-stone: #f6f3ec;
+  --color-stone-deep: #ece6d8;
+  --color-cloud: #ffffff;
+
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+}
+
+body {
+  background-color: var(--color-stone);
+  color: var(--color-ink-text);
+}
+
+::selection {
+  background-color: var(--color-brass-soft);
+  color: var(--color-ink);
+}
