@@ -30,11 +30,16 @@ export const units621William: Unit621William[] = [
     basePricePerBed: 1150,
     accent: "blue",
     floorPlan: {
-      src: "/images/621-william/floorplan-5bed-3bath.jpg",
-      alt: "Level 2 West floor plan, 5 bedroom 3 bathroom layout",
-      caption: "Level 2 West · 5 bed / 3 bath · 1,534 SF",
+      src: "/images/621-william/arch-plan-level2west.jpg",
+      alt: "Level 2 West architectural floor plan",
+      caption: "Architect floor plan · Level 2 West",
     },
     renderings: [
+      {
+        src: "/images/621-william/render-3d-level2west.jpg",
+        alt: "3D rendered floor plan overview for Level 2 West, 5 bedroom 3 bathroom",
+        caption: "3D floor plan · Level 2 West",
+      },
       {
         src: "/images/621-william/render-living-hallway.jpg",
         alt: "Living room and hallway rendering for Level 2 West",
@@ -52,11 +57,16 @@ export const units621William: Unit621William[] = [
     basePricePerBed: 1550,
     accent: "brass",
     floorPlan: {
-      src: "/images/621-william/floorplan-3bed-2bath.jpg",
-      alt: "Level 2 East floor plan, 3 bedroom 2 bathroom layout",
-      caption: "Level 2 East · 3 bed / 2 bath · 987 SF",
+      src: "/images/621-william/arch-plan-level2east.jpg",
+      alt: "Level 2 East architectural floor plan",
+      caption: "Architect floor plan · Level 2 East",
     },
     renderings: [
+      {
+        src: "/images/621-william/render-3d-level2east.jpg",
+        alt: "3D rendered floor plan overview for Level 2 East, 3 bedroom 2 bathroom",
+        caption: "3D floor plan · Level 2 East",
+      },
       {
         src: "/images/621-william/render-kitchen-island.jpg",
         alt: "Kitchen island and living area rendering for Level 2 East",
@@ -79,11 +89,16 @@ export const units621William: Unit621William[] = [
     basePricePerBed: 1850,
     accent: "green",
     floorPlan: {
-      src: "/images/621-william/floorplan-2bed-2bath.jpg",
-      alt: "Level 3 East floor plan, 2 bedroom 2 bathroom layout",
-      caption: "Level 3 East · 2 bed / 2 bath · 1,042 SF",
+      src: "/images/621-william/arch-plan-level3east.jpg",
+      alt: "Level 3 East architectural floor plan",
+      caption: "Architect floor plan · Level 3 East",
     },
     renderings: [
+      {
+        src: "/images/621-william/render-3d-level3east.jpg",
+        alt: "3D rendered floor plan overview for Level 3 East, 2 bedroom 2 bathroom",
+        caption: "3D floor plan · Level 3 East",
+      },
       {
         src: "/images/621-william/render-vaulted-living.jpg",
         alt: "Vaulted-ceiling living and kitchen rendering for Level 3 East",

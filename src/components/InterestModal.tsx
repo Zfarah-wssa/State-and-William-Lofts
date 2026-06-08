@@ -36,24 +36,15 @@ export function InterestModal({
     setForm(emptyForm);
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const subject = `Interest in ${unitName} — State & William Lofts`;
-    const body = [
-      `Unit: ${unitName}`,
-      `First name: ${form.firstName}`,
-      `Last name: ${form.lastName}`,
-      `Email: ${form.email}`,
-      `Phone: ${form.phone}`,
-      `Notes: ${form.notes}`,
-    ].join("\n");
+    await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ unitName, ...form }),
+    });
 
-    const mailto = `mailto:afarah@wssallc.com,zfarah@wssallc.com?subject=${encodeURIComponent(
-      subject,
-    )}&body=${encodeURIComponent(body)}`;
-
-    window.location.href = mailto;
     setSubmitted(true);
   };
 
