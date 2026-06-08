@@ -38,19 +38,13 @@ export function Hero() {
           unit.
         </p>
 
-        <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
+        <div className="mt-9">
           <Link
             href="/properties/621-william"
             className="inline-flex items-center justify-center rounded-full bg-brass px-8 py-3.5 text-sm font-semibold text-ink shadow-lg shadow-brass/30 transition-transform hover:-translate-y-0.5 hover:bg-brass-soft"
           >
             View Units
           </Link>
-          <a
-            href="#contact"
-            className="inline-flex items-center justify-center rounded-full border border-stone/30 px-8 py-3.5 text-sm font-semibold text-stone backdrop-blur-sm transition-colors hover:border-stone/60"
-          >
-            Schedule a Private Tour
-          </a>
         </div>
 
         <ul className="mt-12 flex flex-wrap gap-3 text-sm">

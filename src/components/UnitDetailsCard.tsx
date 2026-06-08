@@ -49,6 +49,12 @@ export function UnitDetailsCard({ unit }: { unit: Unit621William }) {
     setPricePerBed(Number.isFinite(parsed) && parsed >= 0 ? parsed : 0);
   };
 
+  const [primaryImage = unit.floorPlan, ...restRenderings] = unit.renderings;
+  const smallerImages = [
+    ...restRenderings.map((rendering) => ({ ...rendering, isFloorPlan: false })),
+    { ...unit.floorPlan, isFloorPlan: true },
+  ];
+
   return (
     <article
       id={unit.id}
@@ -61,29 +67,29 @@ export function UnitDetailsCard({ unit }: { unit: Unit621William }) {
         <div className="border-b border-ink/8 lg:border-b-0 lg:border-r">
           <div className="relative aspect-[4/3]">
             <Image
-              src={unit.floorPlan.src}
-              alt={unit.floorPlan.alt}
+              src={primaryImage.src}
+              alt={primaryImage.alt}
               fill
               sizes="(min-width: 1024px) 480px, 100vw"
-              className="object-contain bg-stone-deep p-2"
+              className="object-cover"
             />
+            <span className="absolute inset-x-0 bottom-0 bg-ink/70 px-4 py-2 text-xs font-medium uppercase tracking-wide text-stone">
+              {primaryImage.caption}
+            </span>
           </div>
-          <p className="px-5 py-3 text-center text-xs font-medium uppercase tracking-[0.2em] text-slate">
-            {unit.floorPlan.caption}
-          </p>
-          {unit.renderings.length > 0 && (
-            <div className="grid grid-cols-2 gap-px bg-ink/8 px-0">
-              {unit.renderings.map((rendering) => (
-                <figure key={rendering.src} className="relative aspect-[4/3] bg-cloud">
+          {smallerImages.length > 0 && (
+            <div className="grid grid-cols-3 gap-px bg-ink/8">
+              {smallerImages.map((image) => (
+                <figure key={image.src} className="relative aspect-[4/3] bg-cloud">
                   <Image
-                    src={rendering.src}
-                    alt={rendering.alt}
+                    src={image.src}
+                    alt={image.alt}
                     fill
-                    sizes="(min-width: 1024px) 240px, 50vw"
-                    className="object-cover"
+                    sizes="(min-width: 1024px) 160px, 33vw"
+                    className={image.isFloorPlan ? "object-contain bg-stone-deep p-1.5" : "object-cover"}
                   />
-                  <figcaption className="absolute inset-x-0 bottom-0 bg-ink/70 px-3 py-1.5 text-[11px] font-medium uppercase tracking-wide text-stone">
-                    {rendering.caption}
+                  <figcaption className="absolute inset-x-0 bottom-0 bg-ink/70 px-2 py-1 text-[10px] font-medium uppercase tracking-wide text-stone">
+                    {image.caption}
                   </figcaption>
                 </figure>
               ))}
