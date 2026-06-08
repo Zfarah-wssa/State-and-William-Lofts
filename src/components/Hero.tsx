@@ -51,15 +51,15 @@ export function Hero() {
 
           <dl className="mt-14 grid grid-cols-3 gap-6 border-t border-stone/10 pt-8 sm:max-w-md">
             <div>
-              <dt className="font-display text-2xl text-brass-soft sm:text-3xl">6</dt>
+              <dt className="font-display text-2xl text-brass-soft sm:text-3xl">3</dt>
               <dd className="mt-1 text-xs uppercase tracking-wide text-stone/60">
-                Curated properties
+                Available units
               </dd>
             </div>
             <div>
-              <dt className="font-display text-2xl text-brass-soft sm:text-3xl">0.4 mi</dt>
+              <dt className="font-display text-2xl text-brass-soft sm:text-3xl">621</dt>
               <dd className="mt-1 text-xs uppercase tracking-wide text-stone/60">
-                Avg. distance to The Diag
+                E. William St.
               </dd>
             </div>
             <div>
@@ -76,22 +76,22 @@ export function Hero() {
           <div className="overflow-hidden rounded-3xl border border-stone/10 bg-ink-soft/60 shadow-2xl shadow-black/30">
             <div className="space-y-4 p-7">
               <p className="text-xs uppercase tracking-[0.25em] text-brass-soft">
-                Featured this week
+                Now leasing &middot; 615.5 / 621 E. William St.
               </p>
               <h2 className="font-display text-2xl text-stone">
-                The State House on State
+                Level 2 West
               </h2>
               <p className="text-sm leading-relaxed text-stone/70">
-                A landmark brick mid-rise reimagined with designer interiors,
-                steps from the Diag &mdash; with a rooftop lounge overlooking
-                Central Campus.
+                A spacious five-bedroom layout at 615.5 E. William St. &mdash;
+                fully furnished, with designer finishes and 1,534 square feet
+                of living space.
               </p>
               <div className="flex items-center justify-between border-t border-stone/10 pt-4">
                 <span className="font-display text-xl text-brass-soft">
-                  $1,095<span className="text-sm text-stone/60"> / bed / mo</span>
+                  $1,150<span className="text-sm text-stone/60"> / bed / mo</span>
                 </span>
                 <span className="rounded-full bg-stone/10 px-3 py-1 text-xs font-medium text-stone/80">
-                  4 bed &middot; 2 bath
+                  5 bed &middot; 3 bath
                 </span>
               </div>
             </div>

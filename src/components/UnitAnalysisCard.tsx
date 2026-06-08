@@ -34,7 +34,10 @@ export function UnitAnalysisCard({ unit }: { unit: Unit621William }) {
   };
 
   return (
-    <article className="overflow-hidden rounded-2xl border border-ink/8 bg-cloud shadow-sm">
+    <article
+      id={unit.id}
+      className="scroll-mt-28 overflow-hidden rounded-2xl border border-ink/8 bg-cloud shadow-sm"
+    >
       <div className={`h-1 w-full ${accent.rule}`} aria-hidden />
 
       <div className="grid gap-0 lg:grid-cols-[1.1fr_1fr]">
