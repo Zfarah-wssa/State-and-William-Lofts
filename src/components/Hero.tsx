@@ -32,10 +32,9 @@ export function Hero() {
         </h1>
 
         <p className="mt-6 max-w-xl text-base leading-relaxed text-stone/85 sm:text-lg">
-          State &amp; William Lofts brings three beautifully renovated units to
-          621 E. William St. &mdash; a five-minute walk from the Diag. Every
-          home arrives fully furnished, and every unit has its own in-unit
-          washer and dryer.
+          State &amp; William Lofts brings three curated units to 621 E.
+          William St. &mdash; a five-minute walk from the Diag. Every home is
+          fully furnished, and laundry machines are included per unit.
         </p>
 
         <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -56,7 +55,7 @@ export function Hero() {
         <ul className="mt-12 flex flex-wrap gap-3 text-sm">
           {[
             "Fully furnished",
-            "In-unit washer & dryer in every home",
+            "Laundry machines included per unit",
             "Central A/C",
             "5 min to The Diag",
           ].map((item) => (

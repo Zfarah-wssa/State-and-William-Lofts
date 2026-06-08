@@ -13,7 +13,7 @@ const accentClasses: Record<Unit621William["accent"], { rule: string; text: stri
 const currency = (value: number) =>
   value.toLocaleString("en-US", { maximumFractionDigits: 0 });
 
-export function UnitAnalysisCard({ unit }: { unit: Unit621William }) {
+export function UnitDetailsCard({ unit }: { unit: Unit621William }) {
   const [pricePerBed, setPricePerBed] = useState(unit.basePricePerBed);
   const inputId = useId();
   const accent = accentClasses[unit.accent];
@@ -72,7 +72,7 @@ export function UnitAnalysisCard({ unit }: { unit: Unit621William }) {
           )}
         </div>
 
-        {/* Analysis */}
+        {/* Unit details */}
         <div className="flex flex-col gap-5 p-6 sm:p-7">
           <div>
             <p className={`text-xs font-semibold uppercase tracking-[0.25em] ${accent.text}`}>
@@ -83,7 +83,7 @@ export function UnitAnalysisCard({ unit }: { unit: Unit621William }) {
               {unit.address} &middot; {unit.bedrooms} bed / {unit.bathrooms} bath
             </p>
             <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-stone-deep px-3 py-1.5 text-xs font-medium uppercase tracking-wide text-ink-text">
-              Fully furnished &middot; in-unit washer &amp; dryer
+              Fully furnished &middot; laundry machines included per unit
             </p>
           </div>
 
