@@ -178,13 +178,27 @@ export function UnitDetailsCard({ unit }: { unit: Unit621William }) {
                 Rent
               </p>
               <div className="flex flex-col gap-2">
-                <div className="flex items-baseline justify-between">
-                  <span className="text-sm text-slate">Per bed</span>
-                  <span className="font-display text-xl font-semibold text-ink">
-                    ${currency(unit.basePricePerBed)}
-                    <span className="ml-1 text-sm font-normal text-slate">/ mo</span>
-                  </span>
-                </div>
+                {unit.roomPricing ? (
+                  <>
+                    {unit.roomPricing.map((room) => (
+                      <div key={room.label} className="flex items-baseline justify-between">
+                        <span className="text-sm text-slate">{room.label}</span>
+                        <span className="font-display text-xl font-semibold text-ink">
+                          ${currency(room.price)}
+                          <span className="ml-1 text-sm font-normal text-slate">/ mo</span>
+                        </span>
+                      </div>
+                    ))}
+                  </>
+                ) : (
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-sm text-slate">Per bed</span>
+                    <span className="font-display text-xl font-semibold text-ink">
+                      ${currency(unit.basePricePerBed)}
+                      <span className="ml-1 text-sm font-normal text-slate">/ mo</span>
+                    </span>
+                  </div>
+                )}
                 {unit.pricePerUnit && (
                   <div className="flex items-baseline justify-between border-t border-ink/8 pt-2">
                     <span className="text-sm text-slate">Entire unit</span>

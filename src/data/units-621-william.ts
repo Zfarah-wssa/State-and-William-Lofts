@@ -4,6 +4,11 @@ export type UnitImage = {
   caption: string;
 };
 
+export type RoomPrice = {
+  label: string;
+  price: number;
+};
+
 export type Unit621William = {
   id: string;
   name: string;
@@ -13,6 +18,7 @@ export type Unit621William = {
   squareFootage: number;
   basePricePerBed: number;
   pricePerUnit?: number;
+  roomPricing?: RoomPrice[];
   accent: "blue" | "brass" | "green";
   floorPlan: UnitImage;
   renderings: UnitImage[];
@@ -41,11 +47,6 @@ export const units621William: Unit621William[] = [
         src: "/images/621-william/render-3d-level2west.jpg",
         alt: "3D rendered floor plan overview for Level 2 West, 5 bedroom 3 bathroom",
         caption: "3D floor plan · Level 2 West",
-      },
-      {
-        src: "/images/621-william/render-interior-level2west.jpg",
-        alt: "Interior rendering of living room and kitchen for Level 2 West",
-        caption: "Living room & kitchen",
       },
       {
         src: "/images/621-william/render-vaulted-kitchen-level2west.jpg",
@@ -93,7 +94,12 @@ export const units621William: Unit621William[] = [
     bedrooms: 2,
     bathrooms: 2,
     squareFootage: 1042,
-    basePricePerBed: 1850,
+    basePricePerBed: 2500,
+    pricePerUnit: 5000,
+    roomPricing: [
+      { label: "Master bed + master bath", price: 2750 },
+      { label: "Second bed + bathroom", price: 2250 },
+    ],
     accent: "green",
     floorPlan: {
       src: "/images/621-william/arch-plan-level3east.jpg",
@@ -107,9 +113,14 @@ export const units621William: Unit621William[] = [
         caption: "3D floor plan · Level 3 East",
       },
       {
-        src: "/images/621-william/render-vaulted-living.jpg",
-        alt: "Vaulted-ceiling living and kitchen rendering for Level 3 East",
-        caption: "Vaulted living & kitchen",
+        src: "/images/621-william/render-living-kitchen-level3east.jpg",
+        alt: "Living room and kitchen rendering for Level 3 East",
+        caption: "Living room & kitchen",
+      },
+      {
+        src: "/images/621-william/render-bedroom-level3east.jpg",
+        alt: "Bedroom rendering for Level 3 East",
+        caption: "Bedroom",
       },
     ],
   },
