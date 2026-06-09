@@ -12,6 +12,7 @@ export type Unit621William = {
   bathrooms: number;
   squareFootage: number;
   basePricePerBed: number;
+  pricePerUnit?: number;
   accent: "blue" | "brass" | "green";
   floorPlan: UnitImage;
   renderings: UnitImage[];
@@ -27,7 +28,8 @@ export const units621William: Unit621William[] = [
     bedrooms: 5,
     bathrooms: 3,
     squareFootage: 1534,
-    basePricePerBed: 1150,
+    basePricePerBed: 1200,
+    pricePerUnit: 6000,
     accent: "blue",
     floorPlan: {
       src: "/images/621-william/arch-plan-level2west.jpg",
@@ -41,9 +43,9 @@ export const units621William: Unit621William[] = [
         caption: "3D floor plan · Level 2 West",
       },
       {
-        src: "/images/621-william/render-living-hallway.jpg",
-        alt: "Living room and hallway rendering for Level 2 West",
-        caption: "Living room & hallway",
+        src: "/images/621-william/render-interior-level2west.jpg",
+        alt: "Interior rendering of living room and kitchen for Level 2 West",
+        caption: "Living room & kitchen",
       },
     ],
   },
