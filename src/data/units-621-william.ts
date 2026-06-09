@@ -86,6 +86,11 @@ export const units621William: Unit621William[] = [
         alt: "Bedroom and study nook rendering",
         caption: "Bedroom & study nook",
       },
+      {
+        src: "/images/621-william/rooms-level2east.jpg",
+        alt: "Level 2 East bedrooms and bathrooms — 3 bed 2 bath",
+        caption: "Bedrooms & bathrooms",
+      },
     ],
   },
   {
