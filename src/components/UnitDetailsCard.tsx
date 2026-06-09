@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Image from "next/image";
-import type { Unit621William, UnitImage } from "@/data/units-621-william";
+import type { Unit621William } from "@/data/units-621-william";
 import { InterestModal } from "@/components/InterestModal";
 import { ImageLightbox } from "@/components/ImageLightbox";
 
@@ -31,7 +31,7 @@ const currency = (value: number) =>
   value.toLocaleString("en-US", { maximumFractionDigits: 0 });
 
 export function UnitDetailsCard({ unit }: { unit: Unit621William }) {
-  const [lightbox, setLightbox] = useState<UnitImage | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const accent = accentClasses[unit.accent];
 
   const stats = useMemo(() => {
@@ -47,14 +47,21 @@ export function UnitDetailsCard({ unit }: { unit: Unit621William }) {
   ];
   const hasImages = unit.renderings.length > 0;
 
+  // All images in order for lightbox navigation: primary, then smaller images
+  const allImages = [
+    primaryImage,
+    ...restRenderings,
+    unit.floorPlan,
+  ];
+
   return (
     <>
-      {lightbox && (
+      {lightboxIndex !== null && (
         <ImageLightbox
-          src={lightbox.src}
-          alt={lightbox.alt}
-          caption={lightbox.caption}
-          onClose={() => setLightbox(null)}
+          images={allImages}
+          index={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+          onNavigate={setLightboxIndex}
         />
       )}
 
@@ -65,12 +72,11 @@ export function UnitDetailsCard({ unit }: { unit: Unit621William }) {
         <div className={`h-1 w-full ${accent.rule}`} aria-hidden />
 
         <div className={hasImages ? "grid gap-0 lg:grid-cols-[1.1fr_1fr]" : ""}>
-          {/* Imagery — only rendered when renderings exist */}
           {hasImages && (
             <div className="border-b border-ink/8 lg:border-b-0 lg:border-r">
               <button
                 type="button"
-                onClick={() => setLightbox(primaryImage)}
+                onClick={() => setLightboxIndex(0)}
                 className="group relative block w-full overflow-hidden focus:outline-none"
                 aria-label={`Expand image: ${primaryImage.caption}`}
               >
@@ -93,11 +99,11 @@ export function UnitDetailsCard({ unit }: { unit: Unit621William }) {
 
               {smallerImages.length > 0 && (
                 <div className="grid grid-cols-3 gap-px bg-ink/8">
-                  {smallerImages.map((image) => (
+                  {smallerImages.map((image, i) => (
                     <button
                       key={image.src}
                       type="button"
-                      onClick={() => setLightbox(image)}
+                      onClick={() => setLightboxIndex(i + 1)}
                       className="group relative aspect-[4/3] overflow-hidden bg-cloud focus:outline-none"
                       aria-label={`Expand image: ${image.caption}`}
                     >
@@ -122,7 +128,6 @@ export function UnitDetailsCard({ unit }: { unit: Unit621William }) {
             </div>
           )}
 
-          {/* Unit details */}
           <div className="flex flex-col gap-5 p-6 sm:p-7">
             <div>
               <p className={`text-xs font-semibold uppercase tracking-[0.25em] ${accent.text}`}>
@@ -172,7 +177,6 @@ export function UnitDetailsCard({ unit }: { unit: Unit621William }) {
               </div>
             </dl>
 
-            {/* Pricing */}
             <div className="rounded-xl border border-ink/10 bg-stone px-5 py-4">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate mb-3">
                 Rent

@@ -53,6 +53,11 @@ export const units621William: Unit621William[] = [
         alt: "Vaulted kitchen and living area rendering for Level 2 West",
         caption: "Vaulted kitchen & living",
       },
+      {
+        src: "/images/621-william/rooms-level2west.jpg",
+        alt: "Level 2 West bedrooms and bathrooms — 5 bed 3 bath",
+        caption: "Bedrooms & bathrooms",
+      },
     ],
   },
   {
@@ -127,6 +132,11 @@ export const units621William: Unit621William[] = [
         src: "/images/621-william/render-bedroom-level3east.jpg",
         alt: "Bedroom rendering for Level 3 East",
         caption: "Bedroom",
+      },
+      {
+        src: "/images/621-william/rooms-level3east.jpg",
+        alt: "Level 3 East bedrooms and bathrooms — 2 bed 2 bath",
+        caption: "Bedrooms & bathrooms",
       },
     ],
   },
