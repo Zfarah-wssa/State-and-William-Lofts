@@ -62,7 +62,8 @@ export const units621William: Unit621William[] = [
     bedrooms: 3,
     bathrooms: 2,
     squareFootage: 987,
-    basePricePerBed: 1550,
+    basePricePerBed: 1750,
+    pricePerUnit: 5250,
     accent: "brass",
     floorPlan: {
       src: "/images/621-william/arch-plan-level2east.jpg",
