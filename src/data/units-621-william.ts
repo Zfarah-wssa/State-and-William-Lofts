@@ -76,9 +76,9 @@ export const units621William: Unit621William[] = [
         caption: "3D floor plan · Level 2 East",
       },
       {
-        src: "/images/621-william/render-kitchen-island.jpg",
-        alt: "Kitchen island and living area rendering for Level 2 East",
-        caption: "Kitchen island & living area",
+        src: "/images/621-william/render-living-level2east.jpg",
+        alt: "Living room and kitchen rendering for Level 2 East",
+        caption: "Living room & kitchen",
       },
       {
         src: "/images/621-william/render-bedroom-study.jpg",
