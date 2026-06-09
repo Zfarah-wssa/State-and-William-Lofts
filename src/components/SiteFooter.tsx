@@ -1,19 +1,14 @@
-const columns = [
-  {
-    heading: "Residents",
-    links: ["Resident Portal", "Maintenance Requests", "Lease Renewals", "Resident Life"],
-  },
-  {
-    heading: "Neighborhoods",
-    links: ["Central Campus", "South University", "Kerrytown", "North Campus Gateway"],
-  },
-];
+"use client";
+
+import { MaintenanceModal } from "@/components/MaintenanceModal";
+
+const residentLinks = ["Resident Portal", "Lease Renewals", "Resident Life"];
 
 export function SiteFooter() {
   return (
     <footer id="contact" className="border-t border-stone/10 bg-ink text-stone/80">
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10">
-        <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
+        <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1.2fr]">
           <div>
             <p className="font-display text-2xl text-stone">State &amp; William Lofts</p>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-stone/60">
@@ -22,22 +17,23 @@ export function SiteFooter() {
             </p>
           </div>
 
-          {columns.map((column) => (
-            <div key={column.heading}>
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brass-soft">
-                {column.heading}
-              </p>
-              <ul className="mt-4 space-y-2.5 text-sm">
-                {column.links.map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-stone/70 transition-colors hover:text-stone">
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brass-soft">
+              Residents
+            </p>
+            <ul className="mt-4 space-y-2.5 text-sm">
+              <li>
+                <MaintenanceModal />
+              </li>
+              {residentLinks.map((link) => (
+                <li key={link}>
+                  <a href="#" className="text-stone/70 transition-colors hover:text-stone">
+                    {link}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
 
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brass-soft">
