@@ -47,6 +47,11 @@ export const units621William: Unit621William[] = [
         alt: "Interior rendering of living room and kitchen for Level 2 West",
         caption: "Living room & kitchen",
       },
+      {
+        src: "/images/621-william/render-vaulted-kitchen-level2west.jpg",
+        alt: "Vaulted kitchen and living area rendering for Level 2 West",
+        caption: "Vaulted kitchen & living",
+      },
     ],
   },
   {

@@ -74,13 +74,13 @@ export function UnitDetailsCard({ unit }: { unit: Unit621William }) {
                 className="group relative block w-full overflow-hidden focus:outline-none"
                 aria-label={`Expand image: ${primaryImage.caption}`}
               >
-                <div className="relative aspect-[4/3]">
+                <div className="relative aspect-[4/3] bg-white">
                   <Image
                     src={primaryImage.src}
                     alt={primaryImage.alt}
                     fill
                     sizes="(min-width: 1024px) 480px, 100vw"
-                    className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                    className="object-contain transition-transform duration-300 group-hover:scale-[1.02]"
                   />
                   <span className="absolute inset-x-0 bottom-0 bg-ink/70 px-4 py-2 text-xs font-medium uppercase tracking-wide text-stone">
                     {primaryImage.caption}
