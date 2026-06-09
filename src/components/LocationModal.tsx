@@ -6,7 +6,7 @@ const landmarks = [
   { name: "The Diag", walk: "5 min", icon: "🎓" },
   { name: "Law Quad", walk: "5 min", icon: "⚖️" },
   { name: "Ross School of Business", walk: "9 min", icon: "📈" },
-  { name: "Michigan Stadium", walk: "15 min", icon: "🏟️" },
+  { name: "Michigan Stadium", walk: "20 min", icon: "🏟️" },
 ];
 
 export function LocationModal({ onClose }: { onClose: () => void }) {
