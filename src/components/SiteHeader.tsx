@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { LocationModal } from "@/components/LocationModal";
+import { ChatBot } from "@/components/ChatBot";
 
 const navLinks = [
   { label: "Listings", href: "#listings" },
@@ -12,10 +13,12 @@ const navLinks = [
 
 export function SiteHeader() {
   const [locationOpen, setLocationOpen] = useState(false);
+  const [tourOpen, setTourOpen] = useState(false);
 
   return (
     <>
       {locationOpen && <LocationModal onClose={() => setLocationOpen(false)} />}
+      <ChatBot isOpen={tourOpen} onClose={() => setTourOpen(false)} trigger="tour" />
 
       <header className="sticky top-0 z-50 border-b border-ink/10 bg-stone/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
@@ -42,23 +45,27 @@ export function SiteHeader() {
             >
               Location
             </button>
-            {navLinks.slice(1).map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-sm font-medium text-slate transition-colors hover:text-ink"
-              >
-                {link.label}
-              </a>
-            ))}
+            <a
+              href="#resident-life"
+              className="text-sm font-medium text-slate transition-colors hover:text-ink"
+            >
+              Resident Life
+            </a>
+            <Link
+              href="/contact"
+              className="text-sm font-medium text-slate transition-colors hover:text-ink"
+            >
+              Contact
+            </Link>
           </nav>
 
-          <a
-            href="#listings"
+          <button
+            type="button"
+            onClick={() => setTourOpen(true)}
             className="hidden rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-stone transition-colors hover:bg-ink-soft sm:inline-flex"
           >
             Tour a Loft
-          </a>
+          </button>
         </div>
       </header>
     </>
