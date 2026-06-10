@@ -1,8 +1,6 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const RECIPIENTS = ["afarah@wssallc.com", "zfarah@wssallc.com"];
 
 export async function POST(request: Request) {
@@ -21,6 +19,7 @@ export async function POST(request: Request) {
   }
 
   try {
+    const resend = new Resend(process.env.RESEND_API_KEY);
     await resend.emails.send({
       from: "State & William Lofts <notifications@wssallc.com>",
       to: RECIPIENTS,
