@@ -14,9 +14,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  const { unitName, firstName, lastName, email, phone, notes } = body;
+  const { unitName, firstName, lastName, email, phone, notes, roommates } = body;
 
-  if (!firstName || !lastName || !email || !phone || !unitName) {
+  if (!firstName || !lastName || !email || !unitName) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
 
@@ -35,6 +35,7 @@ export async function POST(request: Request) {
             <tr><td style="padding:8px 0;color:#666">Last name</td><td style="padding:8px 0;color:#1a1a1a;font-weight:600">${lastName}</td></tr>
             <tr><td style="padding:8px 0;color:#666">Email</td><td style="padding:8px 0;color:#1a1a1a;font-weight:600"><a href="mailto:${email}">${email}</a></td></tr>
             <tr><td style="padding:8px 0;color:#666">Phone</td><td style="padding:8px 0;color:#1a1a1a;font-weight:600">${phone}</td></tr>
+            ${roommates ? `<tr><td style="padding:8px 0;color:#666;vertical-align:top">Roommates</td><td style="padding:8px 0;color:#1a1a1a">${roommates.replace(/\n/g, "<br>")}</td></tr>` : ""}
             ${notes ? `<tr><td style="padding:8px 0;color:#666;vertical-align:top">Notes</td><td style="padding:8px 0;color:#1a1a1a">${notes.replace(/\n/g, "<br>")}</td></tr>` : ""}
           </table>
         </div>
