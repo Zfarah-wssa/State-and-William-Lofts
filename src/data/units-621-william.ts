@@ -54,7 +54,7 @@ export const units621William: Unit621William[] = [
         caption: "Vaulted kitchen & living",
       },
       {
-        src: "/images/621-william/rooms-level2west.jpg",
+        src: "/images/621-william/rooms-level2west-v2.jpg",
         alt: "Level 2 West bedrooms and bathrooms — 5 bed 3 bath",
         caption: "Bedrooms & bathrooms",
       },
