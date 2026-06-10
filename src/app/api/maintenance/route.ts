@@ -47,6 +47,7 @@ export async function POST(request: Request) {
           ${contactRows ? `<table style="width:100%;border-collapse:collapse;margin-bottom:24px">${contactRows}</table>` : ""}
           <p style="color:#666;margin-bottom:8px;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em">Issue description</p>
           <p style="color:#1a1a1a;background:#f5f5f5;padding:16px;border-radius:8px;white-space:pre-wrap;">${description}</p>
+          <p style="color:#999;font-size:12px;margin-top:24px">Sent to: afarah@wssallc.com (810.922.4461) &amp; zfarah@wssallc.com (810.447.1836)</p>
         </div>
       `,
     });
