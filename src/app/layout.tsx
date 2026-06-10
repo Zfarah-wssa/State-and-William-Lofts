@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import { ChatWidget } from "@/components/ChatWidget";
 
 const display = Fraunces({
   variable: "--font-display",
@@ -32,6 +33,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-stone text-ink font-sans">
         {children}
+        <ChatWidget />
       </body>
     </html>
   );
