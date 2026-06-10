@@ -35,7 +35,7 @@ export async function POST(request: Request) {
   try {
     const resend = new Resend(process.env.RESEND_API_KEY);
     await resend.emails.send({
-      from: "State & William Lofts <notifications@wssallc.com>",
+      from: "State & William Lofts <notifications@wssastatewilliamlofts.com>",
       to: RECIPIENTS,
       ...(email ? { replyTo: email } : {}),
       subject: `Maintenance Request${category ? ` — ${category}` : ""}: ${unit}`,
