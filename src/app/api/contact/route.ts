@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 
-const RECIPIENTS = ["afarah@wssallc.com", "zfarah@wssallc.com"];
+const RECIPIENTS = ["jamesmccarthy005@gmail.com"];
 
 export async function POST(request: Request) {
   let body: Record<string, string>;
