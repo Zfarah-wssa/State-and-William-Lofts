@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
+import { units621William } from "@/data/units-621-william";
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -18,11 +19,19 @@ TONE & VOICE — read this carefully:
 - Short responses are often better than long ones. Don't pad.
 `;
 
+const UNIT_LINES = units621William
+  .map((unit) => {
+    const pricing = unit.roomPricing
+      ? unit.roomPricing.map((rp) => `${rp.label}: $${rp.price}/mo`).join(", ")
+      : `$${unit.basePricePerBed}/bed/mo`;
+    return `- ${unit.name}: ${unit.address}, ${unit.bedrooms}BR/${unit.bathrooms}BA, ~${unit.squareFootage.toLocaleString()} sq ft. Pricing: ${pricing}${unit.pricePerUnit ? ` (whole unit: $${unit.pricePerUnit}/mo)` : ""}`;
+  })
+  .join("\n");
+
 const PROPERTY_KNOWLEDGE = `
 PROPERTY:
-- Level 2 West: 615.5 E. William St., 5BR/3BA, ~1,534 sq ft
-- Level 2 East: 621 E. William St., 3BR/2BA, ~987 sq ft
-- Level 3 East: 621 E. William St., 2BR/2BA, ~1,042 sq ft — top floor, most light, best views
+${UNIT_LINES}
+- Level 3 East is the top floor unit — most light, best views
 - All units are newly constructed (NOT renovated) — fully furnished, with stainless appliances and in-unit laundry machines included per unit
 - 5 min walk to central campus (The Diag), Michigan Union, Hill Auditorium
 - 2 min walk to State Street — shops, restaurants, coffee
@@ -31,6 +40,8 @@ PROPERTY:
 - Leases typically 12 months starting August — team handles specifics
 - Parking nearby, pets welcome — confirm details with leasing team
 - Tenants usually pay electric; water/trash often included
+
+IMPORTANT: Always double-check bedroom/bathroom counts above before stating them — Level 2 West is 5BR/3BA, Level 2 East is 3BR/2BA, Level 3 East is 2BR/2BA. Do not mix these up.
 `;
 
 function buildSystemPrompt(
