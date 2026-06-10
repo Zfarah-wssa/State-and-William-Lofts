@@ -20,10 +20,10 @@ TONE & VOICE — read this carefully:
 
 const PROPERTY_KNOWLEDGE = `
 PROPERTY:
-- Level 2 West: 615.5 E. William St., 2BR/2BA, ~1,100 sq ft, renovated 2022
-- Level 2 East: 621 E. William St., 2BR/2BA, ~1,050 sq ft
-- Level 3 East: 621 E. William St., 3BR/2BA, ~1,300 sq ft — top floor, most light, best views
-- Every unit has exposed brick, 10ft+ ceilings, hardwood floors, stainless appliances, in-unit laundry, updated bathrooms
+- Level 2 West: 615.5 E. William St., 5BR/3BA, ~1,534 sq ft
+- Level 2 East: 621 E. William St., 3BR/2BA, ~987 sq ft
+- Level 3 East: 621 E. William St., 2BR/2BA, ~1,042 sq ft — top floor, most light, best views
+- All units are newly constructed (NOT renovated) — fully furnished, with stainless appliances and in-unit laundry machines included per unit
 - 5 min walk to central campus (The Diag), Michigan Union, Hill Auditorium
 - 2 min walk to State Street — shops, restaurants, coffee
 - Nearby: Sweetwaters, Blimpy Burger, Pizza House, Frita Batidos, Blank Slate Creamery
