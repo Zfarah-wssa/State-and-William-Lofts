@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 
-const RECIPIENTS = ["afarah@wssallc.com", "zfarah@wssallc.com"];
+const RECIPIENTS = ["zane@wssastatewilliamlofts.com", "adonis@wssastatewilliamlofts.com"];
 
 export async function POST(request: Request) {
   let body: Record<string, string>;
@@ -37,7 +37,6 @@ export async function POST(request: Request) {
             ${roommates ? `<tr><td style="padding:8px 0;color:#666;vertical-align:top">Roommates</td><td style="padding:8px 0;color:#1a1a1a">${roommates.replace(/\n/g, "<br>")}</td></tr>` : ""}
             ${notes ? `<tr><td style="padding:8px 0;color:#666;vertical-align:top">Notes</td><td style="padding:8px 0;color:#1a1a1a">${notes.replace(/\n/g, "<br>")}</td></tr>` : ""}
           </table>
-          <p style="color:#999;font-size:12px;margin-top:24px">Sent to: afarah@wssallc.com (810.922.4461) &amp; zfarah@wssallc.com (810.447.1836)</p>
         </div>
       `,
     });
