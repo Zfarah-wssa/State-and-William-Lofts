@@ -76,6 +76,11 @@ export const units621William: Unit621William[] = [
     squareFootage: 987,
     basePricePerBed: 1750,
     pricePerUnit: 5250,
+    roomPricing: [
+      { label: "Room 201 (114 sq ft)", price: 1847 },
+      { label: "Room 202 (112 sq ft)", price: 1816 },
+      { label: "Room 203 (98 sq ft)", price: 1587 },
+    ],
     accent: "brass",
     floorPlan: {
       src: "/images/621-william/arch-plan-level2east.jpg",
