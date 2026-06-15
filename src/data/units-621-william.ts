@@ -34,8 +34,15 @@ export const units621William: Unit621William[] = [
     bedrooms: 5,
     bathrooms: 3,
     squareFootage: 1534,
-    basePricePerBed: 1200,
-    pricePerUnit: 6000,
+    basePricePerBed: 1400,
+    pricePerUnit: 7000,
+    roomPricing: [
+      { label: "Room 226 (157 sq ft)", price: 1675 },
+      { label: "Room 225 (144 sq ft)", price: 1537 },
+      { label: "Room 224 (142 sq ft)", price: 1515 },
+      { label: "Room 223 (107 sq ft)", price: 1142 },
+      { label: "Room 222 (106 sq ft)", price: 1131 },
+    ],
     accent: "blue",
     floorPlan: {
       src: "/images/621-william/arch-plan-level2west.jpg",
