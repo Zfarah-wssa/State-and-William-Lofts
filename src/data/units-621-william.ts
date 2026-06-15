@@ -120,8 +120,8 @@ export const units621William: Unit621William[] = [
     basePricePerBed: 2500,
     pricePerUnit: 5000,
     roomPricing: [
-      { label: "Master bed + master bath", price: 2750 },
-      { label: "Second bed + bathroom", price: 2250 },
+      { label: "Room 301 (141 sq ft, master bed + master bath)", price: 2750 },
+      { label: "Room 302 (129 sq ft, second bed + bathroom)", price: 2250 },
     ],
     accent: "green",
     floorPlan: {
