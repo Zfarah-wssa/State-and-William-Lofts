@@ -1,3 +1,6 @@
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
+
 const landmarks = [
   { name: "The Diag", walk: "5 min", icon: "🎓" },
   { name: "Law Quad", walk: "5 min", icon: "⚖️" },
@@ -13,6 +16,7 @@ export const metadata = {
 export default function LocationPage() {
   return (
     <div className="min-h-screen bg-ink">
+      <SiteHeader />
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-0 px-6 pb-16 pt-14 lg:px-10">
         {/* Header */}
         <div className="mb-8 text-center">
@@ -63,6 +67,7 @@ export default function LocationPage() {
           On-street parking available &middot; Near AATA bus routes &middot; Bike-friendly neighborhood
         </p>
       </div>
+      <SiteFooter />
     </div>
   );
 }

@@ -24,7 +24,7 @@ export function SiteHeader() {
 
           <nav className="hidden items-center gap-8 md:flex">
             <a
-              href="#listings"
+              href="/#listings"
               className="text-sm font-medium text-slate transition-colors hover:text-ink"
             >
               Listings
@@ -36,7 +36,7 @@ export function SiteHeader() {
               Location
             </Link>
             <a
-              href="#resident-life"
+              href="/#resident-life"
               className="text-sm font-medium text-slate transition-colors hover:text-ink"
             >
               Resident Life
