@@ -2,22 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { LocationModal } from "@/components/LocationModal";
 import { ChatBot } from "@/components/ChatBot";
 
-const navLinks = [
-  { label: "Listings", href: "#listings" },
-  { label: "Resident Life", href: "#resident-life" },
-  { label: "Contact", href: "#contact" },
-];
-
 export function SiteHeader() {
-  const [locationOpen, setLocationOpen] = useState(false);
   const [tourOpen, setTourOpen] = useState(false);
 
   return (
     <>
-      {locationOpen && <LocationModal onClose={() => setLocationOpen(false)} />}
       <ChatBot isOpen={tourOpen} onClose={() => setTourOpen(false)} trigger="tour" />
 
       <header className="sticky top-0 z-50 border-b border-ink/10 bg-stone/80 backdrop-blur-md">
@@ -38,13 +29,12 @@ export function SiteHeader() {
             >
               Listings
             </a>
-            <button
-              type="button"
-              onClick={() => setLocationOpen(true)}
+            <Link
+              href="/location"
               className="text-sm font-medium text-slate transition-colors hover:text-ink"
             >
               Location
-            </button>
+            </Link>
             <a
               href="#resident-life"
               className="text-sm font-medium text-slate transition-colors hover:text-ink"
