@@ -75,6 +75,7 @@ async function submitForm(
   trigger: ChatTrigger,
   unitName: string | undefined,
   data: Collected,
+  transcript: ConversationEntry[],
 ) {
   if (trigger === "interest" || trigger === "tour" || trigger === "contact") {
     let notesValue: string;
@@ -102,6 +103,7 @@ async function submitForm(
         phone: data.phone,
         notes: notesValue,
         roommates: data.roommates,
+        transcript,
       }),
     });
   } else {
@@ -116,6 +118,7 @@ async function submitForm(
         lastName: data.lastName,
         email: data.email,
         phone: data.phone,
+        transcript,
       }),
     });
   }
@@ -289,8 +292,11 @@ export function ChatBot({ isOpen, onClose, trigger, unitName, variant = "modal" 
 
       if (data.readyToSubmit && !submittedRef.current) {
         submittedRef.current = true;
-        // Fire and forget — don't block the UX
-        submitForm(trigger, unitName, newCollected).catch(() => {});
+        const fullTranscript: ConversationEntry[] = [
+          ...newHistory,
+          { role: "assistant", content: data.message },
+        ];
+        submitForm(trigger, unitName, newCollected, fullTranscript).catch(() => {});
       }
     } catch {
       setMsgs((prev) => [
