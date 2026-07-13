@@ -103,14 +103,43 @@ function searchUrl(): string {
   return `https://sam.gov/search/?${params.toString()}`;
 }
 
+interface ResponseDebugEntry {
+  url: string;
+  status: number;
+  contentType: string;
+}
+
+/** Logs a compact diagnostic dump when scraping comes up empty, so calibration doesn't have to guess blind. */
+async function logDiagnostics(page: Page, label: string, seenResponses: ResponseDebugEntry[]): Promise<void> {
+  console.warn(`[sam-gov] --- diagnostics for ${label} ---`);
+  console.warn(`[sam-gov] final page URL: ${page.url()}`);
+  try {
+    console.warn(`[sam-gov] page title: ${await page.title()}`);
+  } catch {
+    // ignore — page may already be closed
+  }
+  const interesting = seenResponses
+    .filter((r) => r.status >= 300 || r.contentType.includes("json") || r.contentType.includes("html"))
+    .slice(0, 20);
+  for (const r of interesting) {
+    console.warn(`[sam-gov]   ${r.status} ${r.contentType || "(no content-type)"} ${r.url}`);
+  }
+  if (seenResponses.length === 0) {
+    console.warn("[sam-gov]   No network responses observed at all — page may have failed to load.");
+  }
+}
+
 async function collectSearchResults(page: Page): Promise<Record<string, unknown>[]> {
   const collected: Record<string, unknown>[] = [];
   const seenIds = new Set<string>();
+  const seenResponses: ResponseDebugEntry[] = [];
 
   page.on("response", async (response) => {
     const url = response.url();
-    if (!SEARCH_RESPONSE_URL_HINT.test(url)) return;
     const contentType = response.headers()["content-type"] ?? "";
+    seenResponses.push({ url, status: response.status(), contentType });
+
+    if (!SEARCH_RESPONSE_URL_HINT.test(url)) return;
     if (!contentType.includes("json")) return;
 
     let body: unknown;
@@ -141,17 +170,24 @@ async function collectSearchResults(page: Page): Promise<Record<string, unknown>
   // Give any lazily-triggered XHRs a moment to land after networkidle fires.
   await page.waitForTimeout(2_000);
 
+  if (collected.length === 0) {
+    await logDiagnostics(page, "search", seenResponses);
+  }
+
   return collected;
 }
 
 async function collectDetailResult(page: Page, noticeId: string): Promise<Record<string, unknown> | null> {
   let found: Record<string, unknown> | null = null;
+  const seenResponses: ResponseDebugEntry[] = [];
 
   page.on("response", async (response) => {
     if (found) return;
     const url = response.url();
-    if (!SEARCH_RESPONSE_URL_HINT.test(url)) return;
     const contentType = response.headers()["content-type"] ?? "";
+    seenResponses.push({ url, status: response.status(), contentType });
+
+    if (!SEARCH_RESPONSE_URL_HINT.test(url)) return;
     if (!contentType.includes("json")) return;
 
     let body: unknown;
@@ -172,6 +208,10 @@ async function collectDetailResult(page: Page, noticeId: string): Promise<Record
 
   await page.goto(`https://sam.gov/workspace/contract/opp/${noticeId}/view`, { waitUntil: "networkidle", timeout: 60_000 });
   await page.waitForTimeout(2_000);
+
+  if (!found) {
+    await logDiagnostics(page, `detail ${noticeId}`, seenResponses);
+  }
 
   return found;
 }
