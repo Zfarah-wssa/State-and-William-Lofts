@@ -53,7 +53,30 @@ export interface PipelineCheckResult {
   missingNoticeIds: string[];
 }
 
-/** Re-checks every tracked pipeline item against SAM.gov and diffs it against the last known snapshot. */
+/** Runs `fn` over `items` with at most `limit` in flight at once, preserving result order. */
+async function mapWithConcurrency<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>): Promise<R[]> {
+  const results: R[] = new Array(items.length);
+  let next = 0;
+
+  async function worker(): Promise<void> {
+    for (;;) {
+      const i = next++;
+      if (i >= items.length) return;
+      results[i] = await fn(items[i]);
+    }
+  }
+
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+  return results;
+}
+
+type PipelineLookupResult = { noticeId: string; missing: true } | { noticeId: string; missing: false; snapshot: PipelineSnapshot };
+
+/**
+ * Re-checks every tracked pipeline item against SAM.gov and diffs it against the last known
+ * snapshot. Runs lookups with bounded concurrency rather than one at a time — with dozens of
+ * pipeline items, a strictly sequential pass makes each run several minutes slower for no benefit.
+ */
 export async function checkPipeline(
   pipeline: PipelineItem[],
   source: OpportunitySource,
@@ -63,17 +86,21 @@ export async function checkPipeline(
   const updatedSnapshots: Record<string, PipelineSnapshot> = { ...state.pipelineSnapshots };
   const missingNoticeIds: string[] = [];
 
-  for (const item of pipeline) {
+  const results = await mapWithConcurrency(pipeline, 5, async (item): Promise<PipelineLookupResult> => {
     const raw = await source.fetchByNoticeId(item.noticeId);
-    if (!raw) {
-      missingNoticeIds.push(item.noticeId);
+    if (!raw) return { noticeId: item.noticeId, missing: true };
+    const evaluated = evaluateOpportunity(raw);
+    return { noticeId: item.noticeId, missing: false, snapshot: toSnapshot(item, evaluated) };
+  });
+
+  for (const r of results) {
+    if (r.missing) {
+      missingNoticeIds.push(r.noticeId);
       continue;
     }
-    const evaluated = evaluateOpportunity(raw);
-    const snapshot = toSnapshot(item, evaluated);
-    const previous = state.pipelineSnapshots[item.noticeId];
-    changes.push(...diffSnapshot(previous, snapshot));
-    updatedSnapshots[item.noticeId] = snapshot;
+    const previous = state.pipelineSnapshots[r.noticeId];
+    changes.push(...diffSnapshot(previous, r.snapshot));
+    updatedSnapshots[r.noticeId] = r.snapshot;
   }
 
   return { changes, updatedSnapshots, missingNoticeIds };

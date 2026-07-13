@@ -36,53 +36,57 @@ async function main() {
   const dryRun = process.argv.includes("--dry-run");
   const source: OpportunitySource = dryRun ? new FixtureOpportunitySource() : new PlaywrightOpportunitySource();
 
-  const state = loadState(STATE_PATH);
-  const pipeline = loadPipeline(PIPELINE_PATH);
-  const pipelineNoticeIds = new Set(pipeline.map((p) => p.noticeId));
+  try {
+    const state = loadState(STATE_PATH);
+    const pipeline = loadPipeline(PIPELINE_PATH);
+    const pipelineNoticeIds = new Set(pipeline.map((p) => p.noticeId));
 
-  const raw = await source.fetchOpportunities();
-  const evaluated = raw.filter(isCandidate).map(evaluateOpportunity);
+    const raw = await source.fetchOpportunities();
+    const evaluated = raw.filter(isCandidate).map(evaluateOpportunity);
 
-  const unseenAndNotInPipeline = evaluated.filter(
-    (o) => !state.seenNoticeIds.includes(o.noticeId) && !pipelineNoticeIds.has(o.noticeId)
-  );
+    const unseenAndNotInPipeline = evaluated.filter(
+      (o) => !state.seenNoticeIds.includes(o.noticeId) && !pipelineNoticeIds.has(o.noticeId)
+    );
 
-  const newMatchOpportunities = unseenAndNotInPipeline.filter((o) => o.matchesThresholds);
-  const needsReview = unseenAndNotInPipeline.filter((o) => !o.matchesThresholds && o.requirements.needsManualReview);
-  const newMatches = await Promise.all(newMatchOpportunities.map(enrichMatch));
+    const newMatchOpportunities = unseenAndNotInPipeline.filter((o) => o.matchesThresholds);
+    const needsReview = unseenAndNotInPipeline.filter((o) => !o.matchesThresholds && o.requirements.needsManualReview);
+    const newMatches = await Promise.all(newMatchOpportunities.map(enrichMatch));
 
-  const { changes: pipelineChanges, updatedSnapshots, missingNoticeIds } = await checkPipeline(pipeline, source, state);
+    const { changes: pipelineChanges, updatedSnapshots, missingNoticeIds } = await checkPipeline(pipeline, source, state);
 
-  const date = new Date().toISOString().slice(0, 10);
-  const reportMarkdown = generateReport({
-    date,
-    newMatches,
-    needsReview,
-    pipelineChanges,
-    missingPipelineNoticeIds: missingNoticeIds,
-  });
-
-  mkdirSync(REPORTS_DIR, { recursive: true });
-  const reportPath = path.join(REPORTS_DIR, `${date}.md`);
-  writeFileSync(reportPath, reportMarkdown, "utf-8");
-  console.log(`[sam-gov] Report written to ${reportPath}`);
-  console.log(reportMarkdown);
-
-  await sendReportEmail({
-    subject: generateReportSubject({
+    const date = new Date().toISOString().slice(0, 10);
+    const reportMarkdown = generateReport({
       date,
-      newMatchCount: newMatches.length,
-      pipelineChangeCount: pipelineChanges.length,
-    }),
-    html: generateReportHtml({ date, newMatches, needsReview, pipelineChanges, missingPipelineNoticeIds: missingNoticeIds }),
-    text: reportMarkdown,
-  });
+      newMatches,
+      needsReview,
+      pipelineChanges,
+      missingPipelineNoticeIds: missingNoticeIds,
+    });
 
-  const newlySeenIds = [...newMatches.map((m) => m.opportunity), ...needsReview].map((o) => o.noticeId);
-  saveState(STATE_PATH, {
-    seenNoticeIds: [...new Set([...state.seenNoticeIds, ...newlySeenIds])],
-    pipelineSnapshots: updatedSnapshots,
-  });
+    mkdirSync(REPORTS_DIR, { recursive: true });
+    const reportPath = path.join(REPORTS_DIR, `${date}.md`);
+    writeFileSync(reportPath, reportMarkdown, "utf-8");
+    console.log(`[sam-gov] Report written to ${reportPath}`);
+    console.log(reportMarkdown);
+
+    await sendReportEmail({
+      subject: generateReportSubject({
+        date,
+        newMatchCount: newMatches.length,
+        pipelineChangeCount: pipelineChanges.length,
+      }),
+      html: generateReportHtml({ date, newMatches, needsReview, pipelineChanges, missingPipelineNoticeIds: missingNoticeIds }),
+      text: reportMarkdown,
+    });
+
+    const newlySeenIds = [...newMatches.map((m) => m.opportunity), ...needsReview].map((o) => o.noticeId);
+    saveState(STATE_PATH, {
+      seenNoticeIds: [...new Set([...state.seenNoticeIds, ...newlySeenIds])],
+      pipelineSnapshots: updatedSnapshots,
+    });
+  } finally {
+    await source.close?.();
+  }
 }
 
 main().catch((err) => {
