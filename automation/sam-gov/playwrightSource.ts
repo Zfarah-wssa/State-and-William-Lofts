@@ -176,11 +176,33 @@ async function collectDetailResult(page: Page, noticeId: string): Promise<Record
   return found;
 }
 
+/**
+ * One browser process is launched lazily and reused for every page in a run — launching
+ * a fresh Chromium instance per notice (the original approach) took ~1-2 minutes just in
+ * launch overhead across the ~25+ pipeline lookups a typical run does, on top of actual
+ * page-load time. A single shared browser with one page per lookup is far cheaper.
+ */
 export class PlaywrightOpportunitySource implements OpportunitySource {
+  private browserPromise: Promise<Browser> | null = null;
+
+  private getBrowser(): Promise<Browser> {
+    if (!this.browserPromise) {
+      this.browserPromise = chromium.launch({ headless: true });
+    }
+    return this.browserPromise;
+  }
+
+  async close(): Promise<void> {
+    if (!this.browserPromise) return;
+    const browser = await this.browserPromise;
+    await browser.close();
+    this.browserPromise = null;
+  }
+
   async fetchOpportunities(): Promise<RawOpportunity[]> {
-    const browser: Browser = await chromium.launch({ headless: true });
+    const browser = await this.getBrowser();
+    const page = await browser.newPage();
     try {
-      const page = await browser.newPage();
       const raw = await collectSearchResults(page);
 
       if (raw.length === 0) {
@@ -193,14 +215,14 @@ export class PlaywrightOpportunitySource implements OpportunitySource {
 
       return raw.map(toRawOpportunity).filter((o) => o.noticeId);
     } finally {
-      await browser.close();
+      await page.close();
     }
   }
 
   async fetchByNoticeId(noticeId: string): Promise<RawOpportunity | null> {
-    const browser: Browser = await chromium.launch({ headless: true });
+    const browser = await this.getBrowser();
+    const page = await browser.newPage();
     try {
-      const page = await browser.newPage();
       const item = await collectDetailResult(page, noticeId);
       if (!item) {
         console.warn(`[sam-gov] Could not find notice ${noticeId} on its detail page — it may have been removed, or the detail page's response shape needs calibrating.`);
@@ -208,7 +230,7 @@ export class PlaywrightOpportunitySource implements OpportunitySource {
       }
       return toRawOpportunity(item);
     } finally {
-      await browser.close();
+      await page.close();
     }
   }
 }

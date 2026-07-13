@@ -11,4 +11,7 @@ export interface OpportunitySource {
    * discovery. Returns null if the notice can't be found (e.g. it was pulled from SAM.gov).
    */
   fetchByNoticeId(noticeId: string): Promise<RawOpportunity | null>;
+
+  /** Releases any underlying resources (e.g. a browser process). Safe to omit if there's nothing to clean up. */
+  close?(): Promise<void>;
 }
