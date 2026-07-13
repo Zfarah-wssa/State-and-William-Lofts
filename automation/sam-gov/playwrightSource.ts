@@ -140,50 +140,65 @@ async function logDiagnostics(page: Page, label: string, seenResponses: Response
   }
 }
 
+/**
+ * Passive listeners registered via `page.on("response", async (r) => { ... await r.json() ... })`
+ * turned out to be the actual bug behind several rounds of "zero results, zero errors, zero
+ * anything" runs: the listener's promise keeps running in the background after the function
+ * that registered it has already returned and the page has been closed, so a body read that's
+ * still in flight at that point is simply abandoned — it never resolves *or* rejects, which is
+ * why not even the try/catch added for calibration ever printed anything. `page.waitForResponse`
+ * ties the wait directly to the navigation instead, so the read always happens before the page
+ * closes. Collector functions below only use the passive listener for cheap, synchronous
+ * bookkeeping (recording URL/status/content-type for diagnostics) — never for reading a body.
+ */
+
 async function collectSearchResults(page: Page): Promise<Record<string, unknown>[]> {
   const collected: Record<string, unknown>[] = [];
   const seenIds = new Set<string>();
   const seenResponses: ResponseDebugEntry[] = [];
+  // No confirmed search-results endpoint yet (see CALIBRATION NOTE), so we still discover it
+  // passively — but every body read is tracked and awaited below before the page can close,
+  // rather than left to resolve in the background where it could be silently orphaned.
+  const pendingReads: Promise<void>[] = [];
 
-  page.on("response", async (response) => {
+  page.on("response", (response) => {
     const url = response.url();
-    try {
-      const contentType = response.headers()["content-type"] ?? "";
-      seenResponses.push({ url, status: response.status(), contentType });
+    const contentType = response.headers()["content-type"] ?? "";
+    seenResponses.push({ url, status: response.status(), contentType });
 
-      if (!SEARCH_RESPONSE_URL_HINT.test(url)) return;
-      if (!contentType.includes("json")) return;
+    if (!SEARCH_RESPONSE_URL_HINT.test(url) || !contentType.includes("json")) return;
 
-      const body: unknown = await response.json();
-
-      const arr = extractResultArray(body);
-      if (!arr) {
-        logUnmatchedJson(url, body);
-        return;
-      }
-
-      const opportunities = arr.filter(looksLikeOpportunity);
-      if (opportunities.length === 0) {
-        logUnmatchedJson(url, body);
-        return;
-      }
-
-      for (const item of opportunities) {
-        const id = pick(item, FIELD_ALIASES.noticeId);
-        if (!id || seenIds.has(id)) continue;
-        seenIds.add(id);
-        collected.push(item);
-      }
-    } catch (err) {
-      // Never let a single response's processing error kill the listener — but always
-      // surface it, since a silent catch here is exactly what hid the real problem before.
-      console.warn(`[sam-gov] error handling response from ${url}:`, err);
-    }
+    pendingReads.push(
+      response
+        .json()
+        .then((body: unknown) => {
+          const arr = extractResultArray(body);
+          if (!arr) {
+            logUnmatchedJson(url, body);
+            return;
+          }
+          const opportunities = arr.filter(looksLikeOpportunity);
+          if (opportunities.length === 0) {
+            logUnmatchedJson(url, body);
+            return;
+          }
+          for (const item of opportunities) {
+            const id = pick(item, FIELD_ALIASES.noticeId);
+            if (!id || seenIds.has(id)) continue;
+            seenIds.add(id);
+            collected.push(item);
+          }
+        })
+        .catch((err: unknown) => {
+          console.warn(`[sam-gov] error reading response body from ${url}:`, err);
+        })
+    );
   });
 
   await page.goto(searchUrl(), { waitUntil: "networkidle", timeout: 60_000 });
   // Give any lazily-triggered XHRs a moment to land after networkidle fires.
   await page.waitForTimeout(2_000);
+  await Promise.allSettled(pendingReads);
 
   if (collected.length === 0) {
     await logDiagnostics(page, "search", seenResponses);
@@ -193,50 +208,44 @@ async function collectSearchResults(page: Page): Promise<Record<string, unknown>
 }
 
 async function collectDetailResult(page: Page, noticeId: string): Promise<Record<string, unknown> | null> {
-  let found: Record<string, unknown> | null = null;
   const seenResponses: ResponseDebugEntry[] = [];
-
-  page.on("response", async (response) => {
-    if (found) return;
-    const url = response.url();
-    try {
-      const contentType = response.headers()["content-type"] ?? "";
-      seenResponses.push({ url, status: response.status(), contentType });
-
-      if (!SEARCH_RESPONSE_URL_HINT.test(url)) return;
-      if (!contentType.includes("json")) return;
-
-      const body: unknown = await response.json();
-
-      if (body && typeof body === "object" && looksLikeOpportunity(body as Record<string, unknown>)) {
-        found = body as Record<string, unknown>;
-        return;
-      }
-      const arr = extractResultArray(body);
-      const match = arr?.find((item) => pick(item, FIELD_ALIASES.noticeId) === noticeId);
-      if (match) {
-        found = match;
-        return;
-      }
-      // Only the primary detail record endpoint is worth dumping here — the page also fires
-      // several other json calls scoped to this notice (history, resources, related orgs, etc.)
-      // that aren't the record itself and would just add noise.
-      if (new RegExp(`/opportunities/${noticeId}(\\?|$)`).test(url)) {
-        logUnmatchedJson(url, body);
-      }
-    } catch (err) {
-      console.warn(`[sam-gov] error handling response from ${url}:`, err);
-    }
+  page.on("response", (response) => {
+    seenResponses.push({ url: response.url(), status: response.status(), contentType: response.headers()["content-type"] ?? "" });
   });
 
-  await page.goto(`https://sam.gov/workspace/contract/opp/${noticeId}/view`, { waitUntil: "networkidle", timeout: 60_000 });
-  await page.waitForTimeout(2_000);
+  const recordUrlPattern = new RegExp(`/opportunities/${noticeId}(\\?|$)`);
+  const recordResponsePromise = page
+    .waitForResponse((r) => recordUrlPattern.test(r.url()), { timeout: 60_000 })
+    .catch(() => null);
 
-  if (!found) {
+  await page.goto(`https://sam.gov/workspace/contract/opp/${noticeId}/view`, { waitUntil: "networkidle", timeout: 60_000 });
+
+  const response = await recordResponsePromise;
+  if (!response) {
     await logDiagnostics(page, `detail ${noticeId}`, seenResponses);
+    return null;
   }
 
-  return found;
+  let body: unknown;
+  try {
+    body = await response.json();
+  } catch (err) {
+    console.warn(`[sam-gov] response.json() failed for ${response.url()}:`, err);
+    await logDiagnostics(page, `detail ${noticeId}`, seenResponses);
+    return null;
+  }
+
+  if (body && typeof body === "object" && looksLikeOpportunity(body as Record<string, unknown>)) {
+    return body as Record<string, unknown>;
+  }
+
+  const arr = extractResultArray(body);
+  const match = arr?.find((item) => pick(item, FIELD_ALIASES.noticeId) === noticeId);
+  if (match) return match;
+
+  logUnmatchedJson(response.url(), body);
+  await logDiagnostics(page, `detail ${noticeId}`, seenResponses);
+  return null;
 }
 
 /**
