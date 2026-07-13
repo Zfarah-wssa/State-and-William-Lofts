@@ -147,36 +147,37 @@ async function collectSearchResults(page: Page): Promise<Record<string, unknown>
 
   page.on("response", async (response) => {
     const url = response.url();
-    const contentType = response.headers()["content-type"] ?? "";
-    seenResponses.push({ url, status: response.status(), contentType });
-
-    if (!SEARCH_RESPONSE_URL_HINT.test(url)) return;
-    if (!contentType.includes("json")) return;
-
-    let body: unknown;
     try {
-      body = await response.json();
-    } catch {
-      return;
-    }
+      const contentType = response.headers()["content-type"] ?? "";
+      seenResponses.push({ url, status: response.status(), contentType });
 
-    const arr = extractResultArray(body);
-    if (!arr) {
-      logUnmatchedJson(url, body);
-      return;
-    }
+      if (!SEARCH_RESPONSE_URL_HINT.test(url)) return;
+      if (!contentType.includes("json")) return;
 
-    const opportunities = arr.filter(looksLikeOpportunity);
-    if (opportunities.length === 0) {
-      logUnmatchedJson(url, body);
-      return;
-    }
+      const body: unknown = await response.json();
 
-    for (const item of opportunities) {
-      const id = pick(item, FIELD_ALIASES.noticeId);
-      if (!id || seenIds.has(id)) continue;
-      seenIds.add(id);
-      collected.push(item);
+      const arr = extractResultArray(body);
+      if (!arr) {
+        logUnmatchedJson(url, body);
+        return;
+      }
+
+      const opportunities = arr.filter(looksLikeOpportunity);
+      if (opportunities.length === 0) {
+        logUnmatchedJson(url, body);
+        return;
+      }
+
+      for (const item of opportunities) {
+        const id = pick(item, FIELD_ALIASES.noticeId);
+        if (!id || seenIds.has(id)) continue;
+        seenIds.add(id);
+        collected.push(item);
+      }
+    } catch (err) {
+      // Never let a single response's processing error kill the listener — but always
+      // surface it, since a silent catch here is exactly what hid the real problem before.
+      console.warn(`[sam-gov] error handling response from ${url}:`, err);
     }
   });
 
@@ -198,34 +199,33 @@ async function collectDetailResult(page: Page, noticeId: string): Promise<Record
   page.on("response", async (response) => {
     if (found) return;
     const url = response.url();
-    const contentType = response.headers()["content-type"] ?? "";
-    seenResponses.push({ url, status: response.status(), contentType });
-
-    if (!SEARCH_RESPONSE_URL_HINT.test(url)) return;
-    if (!contentType.includes("json")) return;
-
-    let body: unknown;
     try {
-      body = await response.json();
-    } catch {
-      return;
-    }
+      const contentType = response.headers()["content-type"] ?? "";
+      seenResponses.push({ url, status: response.status(), contentType });
 
-    if (body && typeof body === "object" && looksLikeOpportunity(body as Record<string, unknown>)) {
-      found = body as Record<string, unknown>;
-      return;
-    }
-    const arr = extractResultArray(body);
-    const match = arr?.find((item) => pick(item, FIELD_ALIASES.noticeId) === noticeId);
-    if (match) {
-      found = match;
-      return;
-    }
-    // Only the primary detail record endpoint is worth dumping here — the page also fires
-    // several other json calls scoped to this notice (history, resources, related orgs, etc.)
-    // that aren't the record itself and would just add noise.
-    if (new RegExp(`/opportunities/${noticeId}(\\?|$)`).test(url)) {
-      logUnmatchedJson(url, body);
+      if (!SEARCH_RESPONSE_URL_HINT.test(url)) return;
+      if (!contentType.includes("json")) return;
+
+      const body: unknown = await response.json();
+
+      if (body && typeof body === "object" && looksLikeOpportunity(body as Record<string, unknown>)) {
+        found = body as Record<string, unknown>;
+        return;
+      }
+      const arr = extractResultArray(body);
+      const match = arr?.find((item) => pick(item, FIELD_ALIASES.noticeId) === noticeId);
+      if (match) {
+        found = match;
+        return;
+      }
+      // Only the primary detail record endpoint is worth dumping here — the page also fires
+      // several other json calls scoped to this notice (history, resources, related orgs, etc.)
+      // that aren't the record itself and would just add noise.
+      if (new RegExp(`/opportunities/${noticeId}(\\?|$)`).test(url)) {
+        logUnmatchedJson(url, body);
+      }
+    } catch (err) {
+      console.warn(`[sam-gov] error handling response from ${url}:`, err);
     }
   });
 
