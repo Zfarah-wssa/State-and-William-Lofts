@@ -28,8 +28,16 @@ intentionally out of scope for now.
    site-fit analysis is still out of scope (see below). Requires `ANTHROPIC_API_KEY`;
    without it, or if the metro can't be identified, the report says so instead of
    failing the run.
+5. **Email delivery** — the report is emailed (via Resend, same provider already used
+   for the leasing site's contact/maintenance emails) to `CONFIG.reportRecipients` in
+   `config.ts`, currently `zanefarah@wssastatewilliamlofts.com` and
+   `adonisfarah@wssastatewilliamlofts.com`, from `CONFIG.reportFromAddress`
+   (`sam-gov-report@wssastatewilliamlofts.com`). Requires `RESEND_API_KEY`; without it,
+   the run still completes and writes the file, it just doesn't send. To add/remove a
+   recipient, edit `CONFIG.reportRecipients` in `automation/sam-gov/config.ts`.
 
-Output is a markdown file at `reports/sam-gov/YYYY-MM-DD.md`.
+Output is a markdown file at `reports/sam-gov/YYYY-MM-DD.md`, and — when configured —
+an HTML email with the same content.
 
 ## Not built yet (by design, for now)
 
@@ -37,10 +45,6 @@ Output is a markdown file at `reports/sam-gov/YYYY-MM-DD.md`.
   CoStar, which has no API and requires a paid login — explicitly out of scope until
   that access is arranged. (Broker research above doesn't need CoStar — it's general
   web search.)
-- **Email delivery.** The report is a file for now. This repo already has Resend
-  wired up (`src/app/api/contact/route.ts`) for the leasing site's own emails, so
-  adding a "send this report to a list" step later is a small addition, not a new
-  integration — deliberately saved for last per direction from the team.
 - **SAM.gov login.** The search this uses is public read-only data — no SAM.gov
   account is needed for it. If a future feature needs an authenticated action
   (e.g. reading a restricted attachment), that would be added separately, and
@@ -82,10 +86,16 @@ npm run sam:report
 npm run sam:report:dry
 ```
 
-Set `ANTHROPIC_API_KEY` in the environment to enable broker research (step 4 above);
-without it, the report still generates but notes brokers as unavailable. In GitHub
-Actions, add it as a repo secret (Settings → Secrets and variables → Actions) named
-`ANTHROPIC_API_KEY` — the workflow already passes it through.
+Two secrets enable the optional steps — both are read from the environment, and
+each fails soft (skips its step, doesn't fail the run) if unset:
+
+| Secret | Enables | Where to get it |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | Broker research (step 4) | Anthropic Console |
+| `RESEND_API_KEY` | Email delivery (step 5) | Resend dashboard — same key type already used elsewhere in this repo for the leasing site's own emails |
+
+In GitHub Actions: repo Settings → Secrets and variables → Actions → New repository
+secret, name it exactly as above. The workflow already passes both through.
 
 ## Tracking the pipeline
 

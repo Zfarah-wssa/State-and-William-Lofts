@@ -49,4 +49,10 @@ export const CONFIG = {
     "Federal Bureau Of Investigation",
     "Justice, Department Of",
   ],
+
+  /** Who gets the daily report email. */
+  reportRecipients: ["zanefarah@wssastatewilliamlofts.com", "adonisfarah@wssastatewilliamlofts.com"],
+
+  /** Sender address — must be on a domain verified in the Resend account sending this. */
+  reportFromAddress: "SAM.gov Daily Report <sam-gov-report@wssastatewilliamlofts.com>",
 } as const;

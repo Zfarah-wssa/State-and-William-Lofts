@@ -3,7 +3,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { evaluateOpportunity, isCandidate } from "./evaluate";
 import { checkPipeline, loadPipeline } from "./pipeline";
-import { generateReport } from "./report";
+import { generateReport, generateReportHtml, generateReportSubject } from "./report";
+import { sendReportEmail } from "./email";
 import { loadState, saveState } from "./state";
 import { PlaywrightOpportunitySource } from "./playwrightSource";
 import { FixtureOpportunitySource } from "./fixtureSource";
@@ -66,6 +67,16 @@ async function main() {
   writeFileSync(reportPath, reportMarkdown, "utf-8");
   console.log(`[sam-gov] Report written to ${reportPath}`);
   console.log(reportMarkdown);
+
+  await sendReportEmail({
+    subject: generateReportSubject({
+      date,
+      newMatchCount: newMatches.length,
+      pipelineChangeCount: pipelineChanges.length,
+    }),
+    html: generateReportHtml({ date, newMatches, needsReview, pipelineChanges, missingPipelineNoticeIds: missingNoticeIds }),
+    text: reportMarkdown,
+  });
 
   const newlySeenIds = [...newMatches.map((m) => m.opportunity), ...needsReview].map((o) => o.noticeId);
   saveState(STATE_PATH, {
