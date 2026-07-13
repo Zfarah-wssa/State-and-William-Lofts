@@ -19,15 +19,24 @@ import type { OpportunitySource } from "./source";
  * responses seen that did NOT look like a search results payload, which is the
  * fastest way to spot a field-name or endpoint mismatch and fix FIELD_ALIASES below.
  *
- * Confirmed against real data so far: the notice detail URL format
- * (`sam.gov/workspace/contract/opp/<32-char-hex-id>/view`, from the company's own
- * pipeline spreadsheet links) and the detail page's primary record endpoint
- * (`sam.gov/api/prod/opps/v2/opportunities/<id>?api_key=null`, `application/hal+json`).
- * Still unconfirmed: that endpoint's actual field names (FIELD_ALIASES below is a guess
- * that hasn't matched yet), and the search page's results endpoint — on the one real run
- * so far, the search page never fired any opportunities-search request at all, only
- * unrelated dropdown/alert calls, which may mean `searchUrl()`'s query params don't match
- * what the SPA expects and it never triggers a real search.
+ * Confirmed against real data: the notice detail URL format
+ * (`sam.gov/workspace/contract/opp/<32-char-hex-id>/view`, from the company's own pipeline
+ * spreadsheet links); the detail page's record endpoint
+ * (`sam.gov/api/prod/opps/v2/opportunities/<id>?api_key=null`, `application/hal+json`); and
+ * that record's actual shape — the real fields are nested under a `data2` wrapper this file
+ * didn't originally know about (`{ data2: { title, solicitationNumber, naics: [{code}],
+ * solicitation: { setAside, deadlines: { response } }, placeOfPerformance: { city, state },
+ * organizationId, pointOfContact: [{fullName, email}] }, additionalInfo: {...} }`).
+ * `parseDetailRecord` below builds a RawOpportunity straight from that confirmed shape.
+ *
+ * Still unconfirmed: where the full description/synopsis text and posted date live in that
+ * same object (needed for the SF/lease-term parsing in parseRequirements.ts — until this is
+ * found, pipeline items will keep showing no requirements text, which is a safe default, not
+ * a crash), and the search page's results endpoint — the search page has never fired an
+ * opportunities-search request in any run so far, even once the URL matched the SPA's own
+ * canonical query-param format (confirmed via the final page URL after a run), only
+ * unrelated dropdown/alert calls. FIELD_ALIASES / extractResultArray below remain a guess
+ * for that path only.
  */
 
 const SEARCH_RESPONSE_URL_HINT = /sam\.gov\/.*(search|opportunit|\/opp\/)/i;
@@ -74,6 +83,49 @@ function looksLikeOpportunity(item: Record<string, unknown>): boolean {
   return Boolean(pick(item, FIELD_ALIASES.noticeId) && pick(item, FIELD_ALIASES.title));
 }
 
+interface DetailRecordData2 {
+  title?: string;
+  solicitationNumber?: string;
+  organizationId?: string;
+  naics?: { code?: string[]; type?: string }[];
+  solicitation?: { setAside?: string; deadlines?: { response?: string } };
+  placeOfPerformance?: { city?: { name?: string }; state?: { code?: string; name?: string } };
+  pointOfContact?: { fullName?: string; email?: string }[];
+  description?: string;
+  descriptionText?: string;
+  synopsis?: string;
+  postedDate?: string;
+  publishDate?: string;
+}
+
+/** Confirmed shape of `sam.gov/api/prod/opps/v2/opportunities/<id>` — see CALIBRATION NOTE. */
+function parseDetailRecord(noticeId: string, body: unknown): RawOpportunity | null {
+  const data2 = (body as { data2?: DetailRecordData2 } | undefined)?.data2;
+  if (!data2 || typeof data2.title !== "string") return null;
+
+  const primaryNaics = data2.naics?.find((n) => n.type === "primary") ?? data2.naics?.[0];
+  const city = data2.placeOfPerformance?.city?.name;
+  const state = data2.placeOfPerformance?.state?.code ?? data2.placeOfPerformance?.state?.name;
+  const location = city && state ? `${city}, ${state}` : city || state;
+  const poc = data2.pointOfContact?.[0]?.fullName;
+
+  return {
+    noticeId,
+    title: data2.title,
+    solicitationNumber: data2.solicitationNumber,
+    department: undefined,
+    subTier: undefined,
+    office: [poc, location].filter(Boolean).join(" — ") || undefined,
+    noticeType: undefined,
+    postedDate: data2.postedDate ?? data2.publishDate,
+    responseDeadline: data2.solicitation?.deadlines?.response,
+    setAside: data2.solicitation?.setAside,
+    naicsCode: primaryNaics?.code?.[0],
+    uiLink: `https://sam.gov/workspace/contract/opp/${noticeId}/view`,
+    description: data2.description ?? data2.descriptionText ?? data2.synopsis ?? "",
+  };
+}
+
 function toRawOpportunity(item: Record<string, unknown>): RawOpportunity {
   const noticeId = pick(item, FIELD_ALIASES.noticeId) ?? "";
   return {
@@ -116,7 +168,9 @@ interface ResponseDebugEntry {
 
 /** Logs a truncated snippet of a JSON body that matched the URL hint but didn't parse as an opportunity. */
 function logUnmatchedJson(url: string, body: unknown): void {
-  const snippet = JSON.stringify(body).slice(0, 1000);
+  // Bumped from 1000: the detail record confirmed so far is a few KB, and the still-missing
+  // description/postedDate fields are further in than the first 1000 chars reached.
+  const snippet = JSON.stringify(body).slice(0, 6000);
   console.warn(`[sam-gov] JSON response from ${url} didn't look like opportunity data — body starts: ${snippet}`);
 }
 
@@ -207,7 +261,7 @@ async function collectSearchResults(page: Page): Promise<Record<string, unknown>
   return collected;
 }
 
-async function collectDetailResult(page: Page, noticeId: string): Promise<Record<string, unknown> | null> {
+async function collectDetailResult(page: Page, noticeId: string): Promise<RawOpportunity | null> {
   const seenResponses: ResponseDebugEntry[] = [];
   page.on("response", (response) => {
     seenResponses.push({ url: response.url(), status: response.status(), contentType: response.headers()["content-type"] ?? "" });
@@ -235,13 +289,8 @@ async function collectDetailResult(page: Page, noticeId: string): Promise<Record
     return null;
   }
 
-  if (body && typeof body === "object" && looksLikeOpportunity(body as Record<string, unknown>)) {
-    return body as Record<string, unknown>;
-  }
-
-  const arr = extractResultArray(body);
-  const match = arr?.find((item) => pick(item, FIELD_ALIASES.noticeId) === noticeId);
-  if (match) return match;
+  const parsed = parseDetailRecord(noticeId, body);
+  if (parsed) return parsed;
 
   logUnmatchedJson(response.url(), body);
   await logDiagnostics(page, `detail ${noticeId}`, seenResponses);
@@ -300,7 +349,7 @@ export class PlaywrightOpportunitySource implements OpportunitySource {
         console.warn(`[sam-gov] Could not find notice ${noticeId} on its detail page — it may have been removed, or the detail page's response shape needs calibrating.`);
         return null;
       }
-      return toRawOpportunity(item);
+      return item;
     } finally {
       await page.close();
     }
