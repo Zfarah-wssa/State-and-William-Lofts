@@ -21,14 +21,22 @@ intentionally out of scope for now.
    captured snapshot in `data/state.json`. Any change to ABOA/rentable SF, firm/total
    lease term, or response deadline is called out, e.g. *"ABOA SF min changed 17,000 →
    19,100."*
+4. **Top 5 brokers per new match** — for each new matching opportunity, the metro is
+   parsed out of the notice ("City, ST") and Claude (with its web search tool) looks up
+   the top 5 commercial real estate brokers active there for federal/institutional
+   leasing (`brokers.ts`). This is general web research, not CoStar — CoStar-backed
+   site-fit analysis is still out of scope (see below). Requires `ANTHROPIC_API_KEY`;
+   without it, or if the metro can't be identified, the report says so instead of
+   failing the run.
 
 Output is a markdown file at `reports/sam-gov/YYYY-MM-DD.md`.
 
 ## Not built yet (by design, for now)
 
-- **Site-fit analysis and broker shortlists.** This depends on CoStar, which has no
-  API and requires a paid login. We explicitly deferred this until CoStar access is
-  sorted out — the report only covers new opportunities + pipeline updates right now.
+- **CoStar-backed site-fit analysis.** Finding actual candidate sites/properties needs
+  CoStar, which has no API and requires a paid login — explicitly out of scope until
+  that access is arranged. (Broker research above doesn't need CoStar — it's general
+  web search.)
 - **Email delivery.** The report is a file for now. This repo already has Resend
   wired up (`src/app/api/contact/route.ts`) for the leasing site's own emails, so
   adding a "send this report to a list" step later is a small addition, not a new
@@ -56,6 +64,14 @@ The GitHub Actions workflow (below) is the place this will actually get exercise
 against sam.gov for the first time, since Actions runners aren't behind this
 sandbox's network block.
 
+**To calibrate:** push this branch, then in GitHub go to Actions → "SAM.gov daily
+report" → "Run workflow" to trigger it manually (works even before this merges to
+the default branch). Open the run's logs and check the "Generate report" step —
+if it found zero opportunities, look for `[sam-gov]` warning lines, which print
+exactly which response didn't match the expected shape. Paste those warnings (or
+the whole step log) back and the field mappings in `playwrightSource.ts` can be
+fixed from that, without needing sam.gov reachable from this chat.
+
 ## Running it
 
 ```bash
@@ -65,6 +81,11 @@ npm run sam:report
 # Against local fixture data (no network needed — safe to run anywhere)
 npm run sam:report:dry
 ```
+
+Set `ANTHROPIC_API_KEY` in the environment to enable broker research (step 4 above);
+without it, the report still generates but notes brokers as unavailable. In GitHub
+Actions, add it as a repo secret (Settings → Secrets and variables → Actions) named
+`ANTHROPIC_API_KEY` — the workflow already passes it through.
 
 ## Tracking the pipeline
 

@@ -37,6 +37,20 @@ export interface EvaluatedOpportunity extends RawOpportunity {
   matchesThresholds: boolean;
 }
 
+export interface BrokerRecommendation {
+  name: string;
+  firm: string;
+  rationale: string;
+}
+
+/** A new matching opportunity enriched with the metro it's in and candidate brokers there. */
+export interface EnrichedMatch {
+  opportunity: EvaluatedOpportunity;
+  location: string | null;
+  /** null = lookup unavailable/failed; distinct from "found but empty". */
+  brokers: BrokerRecommendation[] | null;
+}
+
 /** A project the company is actively chasing, keyed by SAM.gov notice ID. */
 export interface PipelineItem {
   noticeId: string;

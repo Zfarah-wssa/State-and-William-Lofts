@@ -1,5 +1,5 @@
 import { CONFIG } from "./config";
-import type { EvaluatedOpportunity, PipelineChange } from "./types";
+import type { EnrichedMatch, EvaluatedOpportunity, PipelineChange } from "./types";
 
 function sfRangeText(o: EvaluatedOpportunity): string {
   const { aboaSfMin, aboaSfMax, rentableSfMin, rentableSfMax } = o.requirements;
@@ -37,6 +37,26 @@ function opportunityLine(o: EvaluatedOpportunity): string {
   ].join("\n");
 }
 
+function brokersLine(match: EnrichedMatch): string {
+  if (!match.location) {
+    return "  - Top brokers: location not identified from notice text — skipped";
+  }
+  if (match.brokers === null) {
+    return `  - Top brokers in ${match.location}: unavailable (set ANTHROPIC_API_KEY to enable, or lookup failed — see logs)`;
+  }
+  if (match.brokers.length === 0) {
+    return `  - Top brokers in ${match.location}: none found`;
+  }
+  const list = match.brokers
+    .map((b, i) => `    ${i + 1}. **${b.name}** (${b.firm}) — ${b.rationale}`)
+    .join("\n");
+  return `  - Top brokers in ${match.location}:\n${list}`;
+}
+
+function matchLine(match: EnrichedMatch): string {
+  return `${opportunityLine(match.opportunity)}\n${brokersLine(match)}`;
+}
+
 function changeLine(c: PipelineChange): string {
   return `- **${c.label}** (\`${c.noticeId}\`): ${c.field} changed ${fmtValue(c.previousValue)} → **${fmtValue(c.newValue)}**`;
 }
@@ -48,7 +68,7 @@ function fmtValue(v: string | number | null): string {
 
 export function generateReport(params: {
   date: string;
-  newMatches: EvaluatedOpportunity[];
+  newMatches: EnrichedMatch[];
   needsReview: EvaluatedOpportunity[];
   pipelineChanges: PipelineChange[];
   missingPipelineNoticeIds: string[];
@@ -68,7 +88,7 @@ export function generateReport(params: {
   if (newMatches.length === 0) {
     lines.push("_None today._");
   } else {
-    lines.push(...newMatches.map(opportunityLine).map((l) => l + "\n"));
+    lines.push(...newMatches.map(matchLine).map((l) => l + "\n"));
   }
   lines.push("");
 
@@ -101,8 +121,8 @@ export function generateReport(params: {
 
   lines.push("---");
   lines.push(
-    "_Site-fit analysis, broker shortlists, and email delivery are not part of this report yet — pipeline " +
-      "tracking and new-opportunity screening are the current scope. See `automation/sam-gov/README.md`._"
+    "_Site-fit analysis (CoStar-dependent) and email delivery are not part of this report yet — new-opportunity " +
+      "screening, broker research, and pipeline tracking are the current scope. See `automation/sam-gov/README.md`._"
   );
 
   return lines.join("\n") + "\n";

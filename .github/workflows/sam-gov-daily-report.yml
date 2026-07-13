@@ -24,6 +24,8 @@ jobs:
       - run: npx playwright install --with-deps chromium
 
       - name: Generate report
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: npm run sam:report
 
       - name: Commit report and updated pipeline state

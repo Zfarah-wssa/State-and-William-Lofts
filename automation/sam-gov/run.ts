@@ -7,7 +7,23 @@ import { generateReport } from "./report";
 import { loadState, saveState } from "./state";
 import { PlaywrightOpportunitySource } from "./playwrightSource";
 import { FixtureOpportunitySource } from "./fixtureSource";
+import { parseLocation } from "./parseLocation";
+import { findTopBrokers } from "./brokers";
 import type { OpportunitySource } from "./source";
+import type { EnrichedMatch, EvaluatedOpportunity } from "./types";
+
+async function enrichMatch(opportunity: EvaluatedOpportunity): Promise<EnrichedMatch> {
+  const location = parseLocation(opportunity.title, opportunity.description);
+  if (!location) return { opportunity, location: null, brokers: null };
+
+  try {
+    const brokers = await findTopBrokers(location);
+    return { opportunity, location, brokers };
+  } catch (err) {
+    console.warn(`[sam-gov] Broker lookup failed for ${opportunity.noticeId} (${location}):`, err);
+    return { opportunity, location, brokers: null };
+  }
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = path.join(__dirname, "data");
@@ -30,8 +46,9 @@ async function main() {
     (o) => !state.seenNoticeIds.includes(o.noticeId) && !pipelineNoticeIds.has(o.noticeId)
   );
 
-  const newMatches = unseenAndNotInPipeline.filter((o) => o.matchesThresholds);
+  const newMatchOpportunities = unseenAndNotInPipeline.filter((o) => o.matchesThresholds);
   const needsReview = unseenAndNotInPipeline.filter((o) => !o.matchesThresholds && o.requirements.needsManualReview);
+  const newMatches = await Promise.all(newMatchOpportunities.map(enrichMatch));
 
   const { changes: pipelineChanges, updatedSnapshots, missingNoticeIds } = await checkPipeline(pipeline, source, state);
 
@@ -50,7 +67,7 @@ async function main() {
   console.log(`[sam-gov] Report written to ${reportPath}`);
   console.log(reportMarkdown);
 
-  const newlySeenIds = [...newMatches, ...needsReview].map((o) => o.noticeId);
+  const newlySeenIds = [...newMatches.map((m) => m.opportunity), ...needsReview].map((o) => o.noticeId);
   saveState(STATE_PATH, {
     seenNoticeIds: [...new Set([...state.seenNoticeIds, ...newlySeenIds])],
     pipelineSnapshots: updatedSnapshots,
