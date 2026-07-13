@@ -19,10 +19,15 @@ import type { OpportunitySource } from "./source";
  * responses seen that did NOT look like a search results payload, which is the
  * fastest way to spot a field-name or endpoint mismatch and fix FIELD_ALIASES below.
  *
- * One thing IS confirmed against real data: the notice detail URL format
- * (`sam.gov/workspace/contract/opp/<32-char-hex-id>/view`) — cross-checked against
- * the live links in the company's own pipeline spreadsheet. The search-results page
- * and its JSON field names are still unverified.
+ * Confirmed against real data so far: the notice detail URL format
+ * (`sam.gov/workspace/contract/opp/<32-char-hex-id>/view`, from the company's own
+ * pipeline spreadsheet links) and the detail page's primary record endpoint
+ * (`sam.gov/api/prod/opps/v2/opportunities/<id>?api_key=null`, `application/hal+json`).
+ * Still unconfirmed: that endpoint's actual field names (FIELD_ALIASES below is a guess
+ * that hasn't matched yet), and the search page's results endpoint — on the one real run
+ * so far, the search page never fired any opportunities-search request at all, only
+ * unrelated dropdown/alert calls, which may mean `searchUrl()`'s query params don't match
+ * what the SPA expects and it never triggers a real search.
  */
 
 const SEARCH_RESPONSE_URL_HINT = /sam\.gov\/.*(search|opportunit|\/opp\/)/i;
@@ -109,6 +114,12 @@ interface ResponseDebugEntry {
   contentType: string;
 }
 
+/** Logs a truncated snippet of a JSON body that matched the URL hint but didn't parse as an opportunity. */
+function logUnmatchedJson(url: string, body: unknown): void {
+  const snippet = JSON.stringify(body).slice(0, 1000);
+  console.warn(`[sam-gov] JSON response from ${url} didn't look like opportunity data — body starts: ${snippet}`);
+}
+
 /** Logs a compact diagnostic dump when scraping comes up empty, so calibration doesn't have to guess blind. */
 async function logDiagnostics(page: Page, label: string, seenResponses: ResponseDebugEntry[]): Promise<void> {
   console.warn(`[sam-gov] --- diagnostics for ${label} ---`);
@@ -150,11 +161,14 @@ async function collectSearchResults(page: Page): Promise<Record<string, unknown>
     }
 
     const arr = extractResultArray(body);
-    if (!arr) return;
+    if (!arr) {
+      logUnmatchedJson(url, body);
+      return;
+    }
 
     const opportunities = arr.filter(looksLikeOpportunity);
     if (opportunities.length === 0) {
-      console.warn(`[sam-gov] JSON response from ${url} didn't look like opportunity results — check FIELD_ALIASES.`);
+      logUnmatchedJson(url, body);
       return;
     }
 
@@ -203,7 +217,16 @@ async function collectDetailResult(page: Page, noticeId: string): Promise<Record
     }
     const arr = extractResultArray(body);
     const match = arr?.find((item) => pick(item, FIELD_ALIASES.noticeId) === noticeId);
-    if (match) found = match;
+    if (match) {
+      found = match;
+      return;
+    }
+    // Only the primary detail record endpoint is worth dumping here — the page also fires
+    // several other json calls scoped to this notice (history, resources, related orgs, etc.)
+    // that aren't the record itself and would just add noise.
+    if (new RegExp(`/opportunities/${noticeId}(\\?|$)`).test(url)) {
+      logUnmatchedJson(url, body);
+    }
   });
 
   await page.goto(`https://sam.gov/workspace/contract/opp/${noticeId}/view`, { waitUntil: "networkidle", timeout: 60_000 });
