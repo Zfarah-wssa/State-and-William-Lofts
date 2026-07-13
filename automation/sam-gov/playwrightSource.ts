@@ -18,9 +18,14 @@ import type { OpportunitySource } from "./source";
  * check the console warnings this file logs — they print the URL/shape of any JSON
  * responses seen that did NOT look like a search results payload, which is the
  * fastest way to spot a field-name or endpoint mismatch and fix FIELD_ALIASES below.
+ *
+ * One thing IS confirmed against real data: the notice detail URL format
+ * (`sam.gov/workspace/contract/opp/<32-char-hex-id>/view`) — cross-checked against
+ * the live links in the company's own pipeline spreadsheet. The search-results page
+ * and its JSON field names are still unverified.
  */
 
-const SEARCH_RESPONSE_URL_HINT = /sam\.gov\/.*(search|opportunit)/i;
+const SEARCH_RESPONSE_URL_HINT = /sam\.gov\/.*(search|opportunit|\/opp\/)/i;
 
 // SAM.gov's internal API has used different field names across versions. We check
 // each of these, in order, for every canonical field we need.
@@ -78,7 +83,7 @@ function toRawOpportunity(item: Record<string, unknown>): RawOpportunity {
     responseDeadline: pick(item, FIELD_ALIASES.responseDeadline),
     setAside: pick(item, FIELD_ALIASES.setAside),
     naicsCode: pick(item, FIELD_ALIASES.naicsCode),
-    uiLink: noticeId ? `https://sam.gov/opp/${noticeId}/view` : "https://sam.gov",
+    uiLink: noticeId ? `https://sam.gov/workspace/contract/opp/${noticeId}/view` : "https://sam.gov",
     description: pick(item, FIELD_ALIASES.description) ?? "",
   };
 }
@@ -165,7 +170,7 @@ async function collectDetailResult(page: Page, noticeId: string): Promise<Record
     if (match) found = match;
   });
 
-  await page.goto(`https://sam.gov/opp/${noticeId}/view`, { waitUntil: "networkidle", timeout: 60_000 });
+  await page.goto(`https://sam.gov/workspace/contract/opp/${noticeId}/view`, { waitUntil: "networkidle", timeout: 60_000 });
   await page.waitForTimeout(2_000);
 
   return found;

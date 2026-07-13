@@ -89,20 +89,32 @@ Actions, add it as a repo secret (Settings → Secrets and variables → Actions
 
 ## Tracking the pipeline
 
-Add entries to `data/pipeline.json` (see `data/pipeline.example.json`):
+`data/pipeline.json` is seeded with the 26 active deals from the company's GSA pipeline
+spreadsheet (`ACTIVE` tab, as of 06/25/2026) that had a SAM.gov link — `PASS` tab entries
+were left out on purpose, since there's no need to watch for amendments on deals already
+declined. Add new entries in the same shape (see `data/pipeline.example.json`):
 
 ```json
 [
   {
-    "noticeId": "36C24924R0001",
-    "label": "VA Outpatient Clinic - Charleston, SC",
-    "notes": "Submitted SOI 2026-06-01"
+    "noticeId": "0e0f21bf2ae441d8a5ee9cbc8736808e",
+    "label": "VA CBOC - Twin Falls, ID",
+    "notes": "RLP# 36C260-26-AP-0014 | Status: Survey Done | Due: 2025-12-19 | GSA Broker: Christina Wolf"
   }
 ]
 ```
 
-`noticeId` is the SAM.gov notice ID (visible in the notice's URL, `sam.gov/opp/<id>/view`).
-The next run will start tracking it and report on any changes from then on.
+`noticeId` is the 32-character hex ID in the notice's SAM.gov URL
+(`sam.gov/workspace/contract/opp/<id>/view`) — grab it from the "SAM LINK" column in the
+spreadsheet, not the RLP#/solicitation number (those are different identifiers). The next
+run will start tracking a new entry and report on any changes to it from then on.
+
+**4 active deals from the spreadsheet aren't tracked yet** because that row's SAM LINK
+cell had no hyperlink to pull an ID from — add them once you have the link:
+- Miramar, FL (0FL2347, GSA Office)
+- Fort Wayne (South), IN (36C25026R0046, VA Mental Health)
+- Spartanburg, SC (36C10F26R0032, VA CBOC)
+- Rosenberg, TX (4TX1037, GSA office)
 
 ## Daily automation
 
