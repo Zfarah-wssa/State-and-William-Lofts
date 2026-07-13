@@ -1,0 +1,42 @@
+name: SAM.gov daily report
+
+on:
+  schedule:
+    # 11:00 UTC = 7:00 AM Eastern (6:00 AM during EDT) — adjust as needed.
+    - cron: "0 11 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+
+      - name: Generate report
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: npm run sam:report
+
+      - name: Commit report and updated pipeline state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/sam-gov automation/sam-gov/data/state.json
+          if git diff --cached --quiet; then
+            echo "Nothing new to commit."
+          else
+            git commit -m "SAM.gov daily report: $(date -u +%Y-%m-%d)"
+            git push
+          fi

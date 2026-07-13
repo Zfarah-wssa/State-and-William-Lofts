@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sam:report": "tsx automation/sam-gov/run.ts",
+    "sam:report:dry": "tsx automation/sam-gov/run.ts --dry-run"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.104.1",
@@ -22,7 +24,9 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.7",
+    "playwright": "^1.49.0",
     "tailwindcss": "^4",
+    "tsx": "^4.19.0",
     "typescript": "^5"
   }
 }
