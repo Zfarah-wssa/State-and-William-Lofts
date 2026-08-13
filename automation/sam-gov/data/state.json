@@ -12,7 +12,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2025-12-19T13:00:00-08:00",
-      "capturedAt": "2026-08-12T11:45:06.391Z"
+      "capturedAt": "2026-08-13T11:45:25.061Z"
     },
     "72d43f7eef0c48b882b86ef176bbf913": {
       "noticeId": "72d43f7eef0c48b882b86ef176bbf913",
@@ -25,7 +25,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2025-12-22T17:00:00-06:00",
-      "capturedAt": "2026-08-12T11:45:06.576Z"
+      "capturedAt": "2026-08-13T11:45:25.874Z"
     },
     "d848fdaeb0634eff99aed5de9aaf9049": {
       "noticeId": "d848fdaeb0634eff99aed5de9aaf9049",
@@ -38,7 +38,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2026-01-15T17:00:00-08:00",
-      "capturedAt": "2026-08-12T11:45:06.139Z"
+      "capturedAt": "2026-08-13T11:45:25.860Z"
     },
     "8efb708d385b495887be307846278e3a": {
       "noticeId": "8efb708d385b495887be307846278e3a",
@@ -51,7 +51,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2026-02-02T16:00:00-05:00",
-      "capturedAt": "2026-08-12T11:45:06.334Z"
+      "capturedAt": "2026-08-13T11:45:25.816Z"
     },
     "ccefe4bae3de4578a53a72e3f163933c": {
       "noticeId": "ccefe4bae3de4578a53a72e3f163933c",
@@ -64,7 +64,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2025-06-03T17:00:00-04:00",
-      "capturedAt": "2026-08-12T11:45:06.188Z"
+      "capturedAt": "2026-08-13T11:45:25.653Z"
     },
     "17366cc5aa2545ab98b326064f0361d8": {
       "noticeId": "17366cc5aa2545ab98b326064f0361d8",
@@ -77,7 +77,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2025-07-11T16:00:00-07:00",
-      "capturedAt": "2026-08-12T11:45:07.941Z"
+      "capturedAt": "2026-08-13T11:45:26.976Z"
     },
     "b7e71758b1dc4804ba0ac6fa539517d2": {
       "noticeId": "b7e71758b1dc4804ba0ac6fa539517d2",
@@ -90,7 +90,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2025-08-25T17:00:00-05:00",
-      "capturedAt": "2026-08-12T11:45:07.951Z"
+      "capturedAt": "2026-08-13T11:45:27.401Z"
     },
     "52da36275410443e9899d61586ea2ee2": {
       "noticeId": "52da36275410443e9899d61586ea2ee2",
@@ -103,7 +103,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2025-09-08T17:00:00-04:00",
-      "capturedAt": "2026-08-12T11:45:08.831Z"
+      "capturedAt": "2026-08-13T11:45:28.586Z"
     },
     "f3bd1b8548514ac7860e14b8f650af61": {
       "noticeId": "f3bd1b8548514ac7860e14b8f650af61",
@@ -116,7 +116,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2025-09-12T17:00:00-07:00",
-      "capturedAt": "2026-08-12T11:45:09.343Z"
+      "capturedAt": "2026-08-13T11:45:27.834Z"
     },
     "a45d9968e44e46f182d85a5bfdcaf760": {
       "noticeId": "a45d9968e44e46f182d85a5bfdcaf760",
@@ -129,7 +129,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2025-09-22T16:00:00-04:00",
-      "capturedAt": "2026-08-12T11:45:09.780Z"
+      "capturedAt": "2026-08-13T11:45:28.697Z"
     },
     "df1128bcecd54dd3807e22bd80194b4d": {
       "noticeId": "df1128bcecd54dd3807e22bd80194b4d",
@@ -142,7 +142,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2025-09-30T17:00:00-07:00",
-      "capturedAt": "2026-08-12T11:45:10.537Z"
+      "capturedAt": "2026-08-13T11:45:30.025Z"
     },
     "a16af39c61504985a316bc2317a8c48f": {
       "noticeId": "a16af39c61504985a316bc2317a8c48f",
@@ -155,7 +155,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2025-10-10T15:00:00-04:00",
-      "capturedAt": "2026-08-12T11:45:10.509Z"
+      "capturedAt": "2026-08-13T11:45:30.420Z"
     },
     "d7332364a8224d79a937a355fa335f8a": {
       "noticeId": "d7332364a8224d79a937a355fa335f8a",
@@ -168,7 +168,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2025-10-10T15:00:00-04:00",
-      "capturedAt": "2026-08-12T11:45:11.283Z"
+      "capturedAt": "2026-08-13T11:45:30.254Z"
     },
     "2c3c0df1012d41678cef9caf792bb30f": {
       "noticeId": "2c3c0df1012d41678cef9caf792bb30f",
@@ -181,7 +181,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2025-11-21T17:00:00-08:00",
-      "capturedAt": "2026-08-12T11:45:11.607Z"
+      "capturedAt": "2026-08-13T11:45:31.028Z"
     },
     "c34e0b831de54d40a16cf2c5f6a90d52": {
       "noticeId": "c34e0b831de54d40a16cf2c5f6a90d52",
@@ -194,7 +194,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2026-01-16T16:00:00-05:00",
-      "capturedAt": "2026-08-12T11:45:11.370Z"
+      "capturedAt": "2026-08-13T11:45:30.988Z"
     },
     "95afd8429ca64aed84645fca74541f77": {
       "noticeId": "95afd8429ca64aed84645fca74541f77",
@@ -207,7 +207,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2026-03-16T16:00:00-04:00",
-      "capturedAt": "2026-08-12T11:45:12.787Z"
+      "capturedAt": "2026-08-13T11:45:32.279Z"
     },
     "53bde50fdbce4b2f8e21b7b314badf62": {
       "noticeId": "53bde50fdbce4b2f8e21b7b314badf62",
@@ -220,7 +220,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2026-03-26T16:00:00-04:00",
-      "capturedAt": "2026-08-12T11:45:12.365Z"
+      "capturedAt": "2026-08-13T11:45:32.550Z"
     },
     "09d34281b05649d9b8c6d4ea34c524e1": {
       "noticeId": "09d34281b05649d9b8c6d4ea34c524e1",
@@ -233,7 +233,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2026-04-10T17:00:00-04:00",
-      "capturedAt": "2026-08-12T11:45:13.722Z"
+      "capturedAt": "2026-08-13T11:45:32.101Z"
     },
     "625fd051146e4a77936ff34604af6ca2": {
       "noticeId": "625fd051146e4a77936ff34604af6ca2",
@@ -246,7 +246,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2026-04-24T16:00:00-04:00",
-      "capturedAt": "2026-08-12T11:45:13.151Z"
+      "capturedAt": "2026-08-13T11:45:33.493Z"
     },
     "9d3688e036744641af4bbe26071672ad": {
       "noticeId": "9d3688e036744641af4bbe26071672ad",
@@ -259,7 +259,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2026-05-25T16:00:00-07:00",
-      "capturedAt": "2026-08-12T11:45:13.377Z"
+      "capturedAt": "2026-08-13T11:45:33.424Z"
     },
     "5ecf43bcbf3849ffbb32d597d584549a": {
       "noticeId": "5ecf43bcbf3849ffbb32d597d584549a",
@@ -272,7 +272,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2026-05-15T16:00:00-07:00",
-      "capturedAt": "2026-08-12T11:45:14.730Z"
+      "capturedAt": "2026-08-13T11:45:34.403Z"
     },
     "4f008bc0365c4233b12ea7fb6e59af21": {
       "noticeId": "4f008bc0365c4233b12ea7fb6e59af21",
@@ -285,7 +285,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2026-06-19T17:00:00-04:00",
-      "capturedAt": "2026-08-12T11:45:14.603Z"
+      "capturedAt": "2026-08-13T11:45:34.561Z"
     },
     "fcd0b7688fce498894386ffbca58d647": {
       "noticeId": "fcd0b7688fce498894386ffbca58d647",
@@ -298,7 +298,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2026-06-16T17:00:00-05:00",
-      "capturedAt": "2026-08-12T11:45:14.686Z"
+      "capturedAt": "2026-08-13T11:45:34.799Z"
     },
     "c1f64660123c41bb9946ad41679bfdfe": {
       "noticeId": "c1f64660123c41bb9946ad41679bfdfe",
@@ -311,7 +311,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2026-06-18T15:00:00-04:00",
-      "capturedAt": "2026-08-12T11:45:14.912Z"
+      "capturedAt": "2026-08-13T11:45:35.525Z"
     },
     "d84b348476d84c0f82a32482755c2daa": {
       "noticeId": "d84b348476d84c0f82a32482755c2daa",
@@ -324,7 +324,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2026-06-26T17:00:00-07:00",
-      "capturedAt": "2026-08-12T11:45:16.135Z"
+      "capturedAt": "2026-08-13T11:45:35.620Z"
     },
     "5913231f830a456e989db54ae604498e": {
       "noticeId": "5913231f830a456e989db54ae604498e",
@@ -337,7 +337,7 @@
       "leaseTermFirmYears": null,
       "leaseTermTotalYears": null,
       "responseDeadline": "2026-06-24T17:00:00-04:00",
-      "capturedAt": "2026-08-12T11:45:16.567Z"
+      "capturedAt": "2026-08-13T11:45:36.114Z"
     }
   }
 }
