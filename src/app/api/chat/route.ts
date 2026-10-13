@@ -31,7 +31,7 @@ const UNIT_LINES = units621William
 const PROPERTY_KNOWLEDGE = `
 PROPERTY:
 ${UNIT_LINES}
-- Level 3 East is the top floor unit — most light, best views
+- Floor 3 Unit 3 is the top floor unit — most light, best views
 - All units are newly constructed (NOT renovated) — fully furnished, with stainless appliances and in-unit laundry machines included per unit
 - 5 min walk to central campus (The Diag), Michigan Union, Hill Auditorium
 - 2 min walk to State Street — shops, restaurants, coffee
@@ -41,7 +41,7 @@ ${UNIT_LINES}
 - Parking nearby, pets welcome — confirm details with leasing team
 - Tenants usually pay electric; water/trash often included
 
-IMPORTANT: Always double-check bedroom/bathroom counts above before stating them — Level 2 West is 5BR/3BA, Level 2 East is 3BR/2BA, Level 3 East is 2BR/2BA. Do not mix these up.
+IMPORTANT: Always double-check bedroom/bathroom counts above before stating them — Floor 2 Unit 1 is 5BR/3BA, Floor 2 Unit 2 is 3BR/2BA, Floor 3 Unit 3 is 2BR/2BA. Do not mix these up.
 `;
 
 function buildSystemPrompt(
@@ -89,10 +89,10 @@ YOUR JOB: Get the details you need through natural conversation. Required: unit,
 ALREADY HAVE: ${alreadyHave || "nothing yet"}
 STILL NEED: ${needed.length > 0 ? needed.join(", ") : "all done — ready to wrap up"}
 
-VALID UNITS: "Level 2 West", "Level 2 East", "Level 3 East"
+VALID UNITS: "Floor 2 Unit 1", "Floor 2 Unit 2", "Floor 3 Unit 3"
 
 HOW TO HANDLE IT:
-- When asking about unit, show suggestions: ["Level 2 West", "Level 2 East", "Level 3 East"]
+- When asking about unit, show suggestions: ["Floor 2 Unit 1", "Floor 2 Unit 2", "Floor 3 Unit 3"]
 - Don't ask for a category. Just ask them to describe what's going on — in their own words.
 - If the description is vague, ask a natural follow-up. "Is it coming from under the sink or the faucet itself?" Not a checklist — just a real question.
 - If it sounds like an emergency (flooding, no heat, gas smell), tell them to also call the property manager directly and give them the number from their lease.
@@ -139,8 +139,8 @@ YOUR JOB: Help them figure out which unit they're most interested in, grab their
 ALREADY HAVE: ${alreadyHave || "nothing yet"}
 STILL NEED: ${needed.length > 0 ? needed.join(", ") : "all done — ready to wrap up"}
 
-VALID UNITS: "Level 2 West", "Level 2 East", "Level 3 East", "All units"
-When asking about unit, show suggestions: ["Level 2 West", "Level 2 East", "Level 3 East", "All units"]
+VALID UNITS: "Floor 2 Unit 1", "Floor 2 Unit 2", "Floor 3 Unit 3", "All units"
+When asking about unit, show suggestions: ["Floor 2 Unit 1", "Floor 2 Unit 2", "Floor 3 Unit 3", "All units"]
 
 HOW TO HANDLE IT:
 - Answer anything they ask about the units, location, what to expect on the tour, etc.
@@ -178,9 +178,9 @@ const PROVIDE_RESPONSE_TOOL: Anthropic.Tool = {
           unit: {
             type: "string",
             enum: [
-              "Level 2 West",
-              "Level 2 East",
-              "Level 3 East",
+              "Floor 2 Unit 1",
+              "Floor 2 Unit 2",
+              "Floor 3 Unit 3",
               "All units",
             ],
           },
