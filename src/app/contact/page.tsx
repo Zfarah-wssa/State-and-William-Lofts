@@ -80,8 +80,8 @@ export default function ContactPage() {
                     Properties
                   </p>
                   <div className="mt-3 space-y-1 text-sm text-slate">
-                    <p>615.5 E. William St. — Level 2 West</p>
-                    <p>621 E. William St. — Level 2 &amp; 3 East</p>
+                    <p>615.5 E. William St. — Floor 2 Unit 1</p>
+                    <p>621 E. William St. — Floor 2 Unit 2 &amp; Floor 3 Unit 3</p>
                     <p>Ann Arbor, Michigan 48104</p>
                   </div>
                 </div>
