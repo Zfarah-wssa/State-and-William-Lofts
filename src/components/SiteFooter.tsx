@@ -56,8 +56,8 @@ export function SiteFooter() {
               </p>
               <p>Fax: 810.767.1196</p>
               <p>
-                <a href="mailto:info@wssallc.com" className="hover:text-brass-soft">
-                  info@wssallc.com
+                <a href="mailto:statewilliamlofts@wssallc.com" className="hover:text-brass-soft">
+                  statewilliamlofts@wssallc.com
                 </a>
               </p>
             </div>
