@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 
-const RECIPIENTS = ["zanefarah@wssastatewilliamlofts.com", "adonisfarah@wssastatewilliamlofts.com"];
+const RECIPIENTS = ["statewilliamlofts@wssallc.com"];
 
 function buildTranscriptHtml(transcript: { role: string; content: string }[]): string {
   if (!transcript || transcript.length === 0) return "";
