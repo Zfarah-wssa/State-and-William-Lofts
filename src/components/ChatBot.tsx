@@ -37,9 +37,9 @@ type ConversationEntry = { role: string; content: string };
 /* ─── Static Data ────────────────────────────────────────────── */
 
 const UNIT_FULL: Record<string, string> = {
-  "Level 2 West": "Level 2 West — 615.5 E. William St.",
-  "Level 2 East": "Level 2 East — 621 E. William St.",
-  "Level 3 East": "Level 3 East — 621 E. William St.",
+  "Floor 2 Unit 1": "Floor 2 Unit 1 — 615.5 E. William St.",
+  "Floor 2 Unit 2": "Floor 2 Unit 2 — 621 E. William St.",
+  "Floor 3 Unit 3": "Floor 3 Unit 3 — 621 E. William St.",
 };
 
 function getInitMessage(trigger: ChatTrigger, unitName?: string): string {
