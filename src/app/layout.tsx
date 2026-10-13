@@ -70,7 +70,7 @@ const structuredData = {
     addressCountry: "US",
   },
   telephone: "+1-810-239-1551",
-  email: "info@wssallc.com",
+  email: "statewilliamlofts@wssallc.com",
 };
 
 export default function RootLayout({
