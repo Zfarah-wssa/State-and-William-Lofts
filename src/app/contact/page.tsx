@@ -58,11 +58,11 @@ export default function ContactPage() {
                     810.239.1551
                   </a>
                   <a
-                    href="mailto:info@wssallc.com"
+                    href="mailto:statewilliamlofts@wssallc.com"
                     className="flex items-center gap-2 text-slate transition-colors hover:text-ink"
                   >
                     <span className="text-brass">→</span>
-                    info@wssallc.com
+                    statewilliamlofts@wssallc.com
                   </a>
                   <a
                     href="https://wssallc.com"
