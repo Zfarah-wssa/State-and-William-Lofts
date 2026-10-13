@@ -7,7 +7,7 @@ import { units621William, williamStreetAddress } from "@/data/units-621-william"
 export const metadata: Metadata = {
   title: "621 William | Floor Plans & Renderings | State & William Lofts",
   description:
-    "Architect floor plans and interior renderings for the three units at 621 William — Level 2 West, Level 2 East, and Level 3 East. Fully furnished, with laundry machines included in every unit.",
+    "Architect floor plans and interior renderings for the three units at 621 William — Floor 2 Unit 1, Floor 2 Unit 2, and Floor 3 Unit 3. Fully furnished, with laundry machines included in every unit.",
 };
 
 export default function William621Page() {
