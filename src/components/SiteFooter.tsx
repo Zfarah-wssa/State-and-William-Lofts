@@ -1,8 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { MaintenanceModal } from "@/components/MaintenanceModal";
 
-const residentLinks = ["Resident Portal", "Lease Renewals", "Resident Life"];
+const residentLinks = [
+  { label: "Resident Portal", href: "/resident-portal" },
+  { label: "Lease Renewals", href: "#" },
+  { label: "Resident Life", href: "#" },
+];
 
 export function SiteFooter() {
   return (
@@ -26,10 +31,10 @@ export function SiteFooter() {
                 <MaintenanceModal />
               </li>
               {residentLinks.map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-stone/70 transition-colors hover:text-stone">
-                    {link}
-                  </a>
+                <li key={link.label}>
+                  <Link href={link.href} className="text-stone/70 transition-colors hover:text-stone">
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
